@@ -2,8 +2,8 @@ public class PersonalAccount extends Account {
 
     double tempBalance;
 
-    PersonalAccount(int accountNumber, double balance, AccountTypes accountType, boolean incurCharges, AccountHolder accountHolder) {
-        super(accountNumber, balance, accountType, incurCharges, accountHolder);
+    PersonalAccount(int accountNumber, double balance, AccountTypes accountType, boolean incurCharges) {
+        super(accountNumber, balance, accountType, incurCharges);
         this.tempBalance = this.getBalance();
     }
 

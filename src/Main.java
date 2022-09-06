@@ -1,12 +1,28 @@
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.*;
     public class Main {
 
         //create a map containing the account holder as object corresponding to his own ID (Integer)
         private static Map<Integer, AccountHolder> customers = new HashMap<>();
+
+        public static int findCustomer (int customerID) {
+            int correctId=0;
+            for(Map.Entry<Integer, AccountHolder> values: customers.entrySet()) {
+                int AccountId = values.getValue().getId();
+//                System.out.println( AccountId);
+                if (AccountId == customerID) {
+                    correctId = values.getKey();
+                }
+            }
+            return correctId;
+        }
+
         public static void main(String[] args) {
 
+            AccountHolder accountHolder1 = new AccountHolder(1234);
+            customers.put(1, accountHolder1);
             //Firstly, the teller must log into the system
             //Display message to user
             System.out.println("******* ACME BANK *******");
@@ -32,6 +48,7 @@ import java.util.Scanner;
                 System.out.println("You are not authorised to access the system!");
             }
         }
+
 
         //login method, using Strings username and password , an integer for number of attempts, and the Scanner input to capture user input
         public static boolean login(String username, String password, int numberOfAttempts, Scanner input) {
@@ -98,7 +115,14 @@ import java.util.Scanner;
                     // PersonalAccount one = new PersonalAccount(acoutnnum, blaance, type, false)
                     break;
                 case "5":
+                    System.out.println("Enter Customer ID:");
+                    int customerId=input.nextInt();
                     // code
+                    int foundCustomer= findCustomer(customerId);
+                    System.out.println(foundCustomer);
+                    customers.get(foundCustomer).addAccount();
+                    System.out.println(customers.get(foundCustomer));
+
                     break;
                 case "6":
                     // code

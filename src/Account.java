@@ -9,12 +9,12 @@ public abstract class Account {
         private AccountTypes type; // there can only be 3 pre-established types of accounts (enum)
         private boolean incurCharges;
 
-    public Account(int accNumber, double balance, AccountTypes type, boolean incurCharges, AccountHolder accountholder) {
+    public Account(int accNumber, double balance, AccountTypes type, boolean incurCharges) {
         this.accNumber = accNumber;
         this.balance = balance;
         this.type = type;
         this.incurCharges = incurCharges;
-        this.accountHolder = accountHolder;
+//        this.accountHolder = accountholder;
     }
 
         //each account has a customer

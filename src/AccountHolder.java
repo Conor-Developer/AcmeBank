@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -18,9 +19,14 @@ public class AccountHolder {
 
     private boolean proofOfAddress = false; //check for photo id
 
-    private Account account; //account(s) associated with the account holder
+    private static Map<Integer, Account> account = new HashMap<>();
+//    private Account account; //account(s) associated with the account holder
 
 
+    protected static void addAccount () {
+        PersonalAccount account1 = new PersonalAccount(5678, 1, AccountTypes.Personal , false);
+        account.put(1, account1);
+    }
     //access private variables through public methods
 
     //get and set account holder id
@@ -104,12 +110,12 @@ public class AccountHolder {
     }
 
     //get and set public methods for accessing the object Account associated with the account holder
-    public Account getAccount() {
-        return account;
-    }
-    public void setAccount(Account account) {
-        this.account = account;
-    }
+//    public Account getAccount() {
+//        return account;
+//    }
+//    public void setAccount(Account account) {
+//        this.account = account;
+//    }
 
     /*
     //constructor
@@ -128,6 +134,9 @@ public class AccountHolder {
     }
     */
     //empty constructor
+    public AccountHolder(int id) {
+        this.id = id;
+    }
     public AccountHolder() {
     }
 
@@ -221,7 +230,8 @@ public class AccountHolder {
                     + "\n"+ "Date of birth: " + accountHolder.getDateOfBirth()
                     + "\n" + "Address: " + accountHolder.getAddress() + ", Postcode: " + accountHolder.getPostcode()
                     +"\n" + "Contact number: " +accountHolder.getPhoneNumber()
-                    +"\n" + "Account(s) records: " +accountHolder.getAccount() );
+//                    +"\n" + "Account(s) records: " +accountHolder.getAccount()
+            );
 
             //ask user whether records need to be updated
             System.out.println(" Would you like to update these records? Y / N ");
@@ -254,7 +264,8 @@ public class AccountHolder {
                         + "\n"+ "Date of birth: " + accountHolder.getDateOfBirth()
                         + "\n" + "Address: " + accountHolder.getAddress() + ", Postcode: " + accountHolder.getPostcode()
                         +"\n" + "Contact number: " +accountHolder.getPhoneNumber()
-                        +"\n" + "Account(s) records: " +accountHolder.getAccount());
+//                        +"\n" + "Account(s) records: " +accountHolder.getAccount()
+                );
 
                 System.out.println("Returning to Main Menu...");
 
@@ -269,6 +280,23 @@ public class AccountHolder {
             }
         }
         return accountHolder;
+    }
+
+    @Override
+    public String toString() {
+        return "AccountHolder{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", dateOfBirth='" + dateOfBirth + '\'' +
+                ", address='" + address + '\'' +
+                ", postcode='" + postcode + '\'' +
+                ", phoneNumber=" + phoneNumber +
+                ", email='" + email + '\'' +
+                ", photoId=" + photoId +
+                ", proofOfAddress=" + proofOfAddress +
+                ", account=" + account +
+                '}';
     }
 
     //method to remove an account holder , using the ID key
