@@ -25,7 +25,7 @@ public class AccountHolder {
 
     protected static void addAccount () {
         PersonalAccount account1 = new PersonalAccount(5678, 1, AccountTypes.Personal , false);
-        account.put(1, account1);
+        account.put(8, account1);
     }
 
     public static int findAccount (int accountNumber) {

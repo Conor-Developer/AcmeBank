@@ -82,6 +82,10 @@ public abstract class Account {
             this.balance -= amount;
         }
 
+        public void deposit (double amount) {
+            this.balance += amount;
+        }
+
     @Override
     public String toString() {
         return "Account{" +

@@ -22,7 +22,7 @@ import java.util.*;
         public static void main(String[] args) {
 
             AccountHolder accountHolder1 = new AccountHolder(1234);
-            customers.put(1, accountHolder1);
+            customers.put(4, accountHolder1);
             //Firstly, the teller must log into the system
             //Display message to user
             System.out.println("******* ACME BANK *******");
@@ -123,21 +123,24 @@ import java.util.*;
                     int customerId=input.nextInt();
                     // code
                     int foundCustomer= findCustomer(customerId);
-                    System.out.println(foundCustomer);
+
+
                     customers.get(foundCustomer).addAccount();
-                    System.out.println(customers.get(foundCustomer));
+
                     System.out.println("Enter Account Number:");
                     int accountNumber=input.nextInt();
                     int foundAccount= customers.get(foundCustomer).findAccount(accountNumber);
-                    System.out.println(customers.get(foundCustomer).account.get(foundAccount));
-                    Account account = customers.get(foundCustomer).account.get(foundAccount);
-                    account.setBalance(500);
-                    System.out.println(customers.get(foundCustomer).account.get(foundAccount));
-                    switch (account.getType()) {
+
+                    Account account1 = customers.get(foundCustomer).account.get(foundAccount);
+
+                    account1.setBalance(500);
+
+                    switch (account1.getType()) {
                         case Personal :
                             System.out.println("1. Check Balance");
                             System.out.println("2. Withdraw");
-                            System.out.println("3. ");
+                            System.out.println("3.  ");
+                            System.out.println("4. Deposit");
                             Scanner scanner = new Scanner(System.in);
                             String option = scanner.nextLine();
                             while (option.isEmpty()) {
@@ -146,14 +149,22 @@ import java.util.*;
                             }
                             switch (option) {
                                 case "1":
-                                    System.out.println("The balance is " + account.getBalance());
+                                    System.out.println("The balance is " + account1.getBalance());
                                     break;
                                 case "2":
                                     System.out.println("Enter the amount you want to withdraw :");
                                     double amount = scanner.nextDouble();
-                                    account.withdraw(amount);
-                                    System.out.println("You have withdrawn " + amount + " remaining balance is " + account.getBalance());
+                                    account1.withdraw(amount);
+                                    System.out.println(account1.getBalance());
+                                    customers.get(foundCustomer).account.put(foundAccount, account1);
+                                    System.out.println("You have withdrawn " + amount + " remaining balance is " + customers.get(foundCustomer).account.get(foundAccount).getBalance());
                                     break;
+                                case "4":
+                                    System.out.println("How much would you like to Deposit: ");
+                                    double amountToDeposit = scanner.nextDouble();
+                                    account1.deposit(amountToDeposit);
+                                    customers.get(foundCustomer).account.put(foundAccount, account1);
+                                    System.out.println("You have deposited " + amountToDeposit + " new balance is " + customers.get(foundCustomer).account.get(foundAccount).getBalance());
                             }
                             break;
                         case ISA :
