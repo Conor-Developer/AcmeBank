@@ -19,13 +19,25 @@ public class AccountHolder {
 
     private boolean proofOfAddress = false; //check for photo id
 
-    private static Map<Integer, Account> account = new HashMap<>();
+    protected static Map<Integer, Account> account = new HashMap<>();
 //    private Account account; //account(s) associated with the account holder
 
 
     protected static void addAccount () {
         PersonalAccount account1 = new PersonalAccount(5678, 1, AccountTypes.Personal , false);
         account.put(1, account1);
+    }
+
+    public static int findAccount (int accountNumber) {
+        int correctId=0;
+        for(Map.Entry<Integer, Account> values: account.entrySet()) {
+            int AccountId = values.getValue().getAccNumber();
+//                System.out.println( AccountId);
+            if (AccountId == accountNumber) {
+                correctId = values.getKey();
+            }
+        }
+        return correctId;
     }
     //access private variables through public methods
 
@@ -280,6 +292,25 @@ public class AccountHolder {
             //return accountHolder object
             return accountHolder;
     }
+
+    @Override
+    public String toString() {
+        return "AccountHolder{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", dateOfBirth='" + dateOfBirth + '\'' +
+                ", address='" + address + '\'' +
+                ", postcode='" + postcode + '\'' +
+                ", phoneNumber=" + phoneNumber +
+                ", email='" + email + '\'' +
+                ", photoId=" + photoId +
+                ", proofOfAddress=" + proofOfAddress +
+                ", account=" + account +
+                '}';
+    }
+
+
 
     //method to remove an account holder , using the ID key
     public void removeAccountHolder (Scanner input, Map<Integer,AccountHolder> customers) {

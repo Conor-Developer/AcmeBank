@@ -126,6 +126,43 @@ import java.util.*;
                     System.out.println(foundCustomer);
                     customers.get(foundCustomer).addAccount();
                     System.out.println(customers.get(foundCustomer));
+                    System.out.println("Enter Account Number:");
+                    int accountNumber=input.nextInt();
+                    int foundAccount= customers.get(foundCustomer).findAccount(accountNumber);
+                    System.out.println(customers.get(foundCustomer).account.get(foundAccount));
+                    Account account = customers.get(foundCustomer).account.get(foundAccount);
+                    account.setBalance(500);
+                    System.out.println(customers.get(foundCustomer).account.get(foundAccount));
+                    switch (account.getType()) {
+                        case Personal :
+                            System.out.println("1. Check Balance");
+                            System.out.println("2. Withdraw");
+                            System.out.println("3. ");
+                            Scanner scanner = new Scanner(System.in);
+                            String option = scanner.nextLine();
+                            while (option.isEmpty()) {
+                                System.out.println("No input detected. Please choose one option. ");
+                                option = input.nextLine();
+                            }
+                            switch (option) {
+                                case "1":
+                                    System.out.println("The balance is " + account.getBalance());
+                                    break;
+                                case "2":
+                                    System.out.println("Enter the amount you want to withdraw :");
+                                    double amount = scanner.nextDouble();
+                                    account.withdraw(amount);
+                                    System.out.println("You have withdrawn " + amount + " remaining balance is " + account.getBalance());
+                                    break;
+                            }
+                            break;
+                        case ISA :
+                            System.out.println("1. ");
+                            System.out.println("1. ");
+                        case Business:
+                            System.out.println("1. ");
+                            System.out.println("1. ");
+                    }
 
                     break;
                 case "6":

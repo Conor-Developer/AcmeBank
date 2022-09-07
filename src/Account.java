@@ -78,7 +78,23 @@ public abstract class Account {
             this.accountHolder = accountHolder;
         }
 
-        //generate public constructor
+        public void withdraw (double amount) {
+            this.balance -= amount;
+        }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "accSortCode='" + accSortCode + '\'' +
+                ", accNumber=" + accNumber +
+                ", balance=" + balance +
+                ", type=" + type +
+                ", incurCharges=" + incurCharges +
+                ", accountHolder=" + accountHolder +
+                '}';
+    }
+
+    //generate public constructor
 
 
         //declare abstract methods common to all types of accounts,
