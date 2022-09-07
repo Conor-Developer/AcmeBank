@@ -112,7 +112,7 @@ import java.util.*;
                 case "4":
                     System.out.println("What kind of account do you want to create? (Personal, ISA, Business)");
                     // call method for creating a new account upon user choice
-                    // PersonalAccount one = new PersonalAccount(acoutnnum, blaance, type, false)
+                    // PersonalAccount one = new PersonalAccount(account, balance, type, false)
                     break;
                 case "5":
                     System.out.println("Enter Customer ID:");
