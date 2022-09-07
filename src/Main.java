@@ -81,12 +81,13 @@ import java.util.*;
 
             //display menu options to user
             System.out.println("Select one of the options:");
-            System.out.println("1. Register New Customer (Account Holder).");
-            System.out.println("2. Account Holder Profile.");
-            System.out.println("3. Remove Account Holder.");
-            System.out.println("4. Create New Account");
-            System.out.println("5. Find Account");
-            System.out.println("6. Delete Account");
+            System.out.println("1. Register New Customer");
+            System.out.println("2. View Customer Profile");
+            System.out.println("3. Update Customer Details");
+            System.out.println("4. Delete Customer Account");
+            System.out.println("5. View Bank Account");
+            System.out.println("6. Create New Bank Account");
+            System.out.println("7. Delete Bank Account");
 
             //catch user input
             String u = input.nextLine();
@@ -99,7 +100,6 @@ import java.util.*;
                 case "1":
                     // call the createAccountHolder method from the AccountHolder class, and assign it to the accountHolder object created
                     accountHolder = accountHolder.createAccountHolder(input);
-
                     // create map entry using the ID and the account holder object
                     customers.put(accountHolder.getId(), accountHolder);
                     break;
@@ -107,12 +107,16 @@ import java.util.*;
                     accountHolder.viewAccountHolder(input, customers); // call the viewAccountHolder method from AccountHolder class
                     break;
                 case "3":
-                    accountHolder.removeAccountHolder(input,customers); //call the removeAccountHolder method from AccountHolder class
+                    accountHolder.updateAccountHolder(input, customers); //call the updateAccountHolder method from AccountHolder class
                     break;
                 case "4":
-                    System.out.println("What kind of account do you want to create? (Personal, ISA, Business)");
+
+                   //  System.out.println("What kind of account do you want to create? (Personal, ISA, Business)");
                     // call method for creating a new account upon user choice
                     // PersonalAccount one = new PersonalAccount(account, balance, type, false)
+
+                    accountHolder.removeAccountHolder(input,customers); //call the removeAccountHolder method from AccountHolder class
+
                     break;
                 case "5":
                     System.out.println("Enter Customer ID:");
@@ -125,6 +129,10 @@ import java.util.*;
 
                     break;
                 case "6":
+                    // call method for creating a new account upon user choice
+                    System.out.println("What kind of account do you want to create? (Personal, ISA, Business)");
+                    break;
+                case "7":
                     // code
                     break;
                 default:
@@ -135,5 +143,4 @@ import java.util.*;
             input.nextLine();
             menu();
         }
-
 }

@@ -167,7 +167,7 @@ public class AccountHolder {
         //take as user input only the first character (index 0)
         char p = input.next().charAt(0);
 
-        //if yes, set boolean photoId to being true  (false by default)
+        //if yes, set boolean photoId to being true§ (false by default)
         if (p=='Y'){
             accountHolder.setPhotoId(true);
         }
@@ -202,8 +202,11 @@ public class AccountHolder {
                 + " has the following ID: " + accountHolder.getId());
 
 
-        //next, call method to create an account?
+        //next, call method to create a bank account?
 
+        System.out.println("Press Enter to return to Main Menu.");
+        input.nextLine();
+        Main.menu();
 
         return accountHolder; //return the accountHolder object created
     }
@@ -232,74 +235,90 @@ public class AccountHolder {
                     +"\n" + "Contact number: " +accountHolder.getPhoneNumber()
 //                    +"\n" + "Account(s) records: " +accountHolder.getAccount()
             );
-
-            //ask user whether records need to be updated
-            System.out.println(" Would you like to update these records? Y / N ");
-
-            //record user input as first character
-            char a = input.next().charAt(0);
-
-            // if yes, update the records, and return the new account holder object (ID key stays the same)
-            if (a =='Y'){
-                Scanner input2 = new Scanner(System.in);
-                System.out.println("Please insert the following details:");
-                System.out.println("First Name: ");
-                accountHolder.setName(input2.nextLine()); //add user input as account holder name
-                System.out.println("Surname: ");
-                accountHolder.setSurname(input2.nextLine()); //add user input as account holder surname
-                accountHolder.setPhotoId(true);
-                accountHolder.setProofOfAddress(true);
-                System.out.println("Address: ");
-                accountHolder.setAddress(input2.nextLine()); //add user input as account holder address
-                System.out.println("Postcode: ");
-                accountHolder.setPostcode(input2.nextLine()); //add user input as account holder post code
-                System.out.println("Contact number: ");
-                accountHolder.setPhoneNumber(input2.nextLong()); //add user input as account holder phone number
-                System.out.println("Email: ");
-                accountHolder.setEmail(input2.nextLine()); //add user input as account holder email
-
-                //display new account holder stored details
-                System.out.println("Done. Here are the new details for ID " + accountHolder.getId() + ": "
-                        + "\n" + "Full name: " + accountHolder.name + " " + accountHolder.surname
-                        + "\n"+ "Date of birth: " + accountHolder.getDateOfBirth()
-                        + "\n" + "Address: " + accountHolder.getAddress() + ", Postcode: " + accountHolder.getPostcode()
-                        +"\n" + "Contact number: " +accountHolder.getPhoneNumber()
-//                        +"\n" + "Account(s) records: " +accountHolder.getAccount()
-                );
-
-                System.out.println("Returning to Main Menu...");
-
-                //return accountHolder object
-                return accountHolder;
-            }
-            //if the user does not wish to update details, return to main menu
-            else{
-                System.out.println("Returning to Main Menu...");
-                //return to main menu
-                Main.menu();
-            }
         }
         return accountHolder;
     }
 
-    @Override
-    public String toString() {
-        return "AccountHolder{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", dateOfBirth='" + dateOfBirth + '\'' +
-                ", address='" + address + '\'' +
-                ", postcode='" + postcode + '\'' +
-                ", phoneNumber=" + phoneNumber +
-                ", email='" + email + '\'' +
-                ", photoId=" + photoId +
-                ", proofOfAddress=" + proofOfAddress +
-                ", account=" + account +
-                '}';
+    public AccountHolder updateAccountHolder (Scanner input, Map<Integer,AccountHolder> customers){
+        System.out.println("Enter the account holder's ID: ");
+
+        //store the user input in a customerId variable
+        Integer customerId = Integer.valueOf(input.nextLine());
+
+        //assign the customerId variable as ID map key, which would hold an account holder object, if it exists
+        AccountHolder accountHolder = customers.get(customerId);
+
+        //if there is no account holder, return user to main menu
+        if (accountHolder==null) {
+            System.out.println("There is no existing account holder associated to this ID.");
+            System.out.println( "Press Enter to return to the Main Menu.");
+            input.nextLine();
+            Main.menu();
+        } else{
+                System.out.println(" The account holder associated to the " + accountHolder.getId() + " ID is:"
+                        + accountHolder.getName() + " " + accountHolder.getSurname());
+            System.out.println( "Insert the following details to update the customer's details:");
+            System.out.println("First Name: ");
+            accountHolder.setName(input.nextLine()); //add user input as account holder name
+            System.out.println("Surname: ");
+            accountHolder.setSurname(input.nextLine()); //add user input as account holder surname
+            accountHolder.setPhotoId(true);
+            accountHolder.setProofOfAddress(true);
+            System.out.println("Address: ");
+            accountHolder.setAddress(input.nextLine()); //add user input as account holder address
+            System.out.println("Postcode: ");
+            accountHolder.setPostcode(input.nextLine()); //add user input as account holder post code
+            System.out.println("Contact number: ");
+            accountHolder.setPhoneNumber(input.nextLong()); //add user input as account holder phone number
+
+            System.out.println("Customer Details Updated.");
+
+            System.out.println( "Press Enter to return to the Main Menu.");
+            input.nextLine();
+            Main.menu();
+        }
+            //return accountHolder object
+            return accountHolder;
     }
 
     //method to remove an account holder , using the ID key
     public void removeAccountHolder (Scanner input, Map<Integer,AccountHolder> customers) {
+
+        // we search for the account holder by ID
+        System.out.println("Enter the account holder's ID: ");
+
+        //store the user input in a customerId variable
+        Integer customerId = Integer.valueOf(input.nextLine());
+
+        //instantiate an accountHolder object which would have the
+        // use the customerId variable as key ID (Account Holder Map)
+        AccountHolder accountHolder = customers.get(customerId);
+
+        //if the map contains key display full name of the account holder and confirm request to delete data
+        if (customers.containsKey(customerId)){
+            System.out.println(" The account holder associated to the " + accountHolder.getId() + " ID is:"
+                    +"\n"  + "Full name: " + accountHolder.getName() + " " + accountHolder.getSurname()
+                    +"\n" + "Are you sure you want to delete this record? Y /N ");
+            char a = input.next().charAt(0);
+            // if user confirms, remove accountHolder object referring to this ID key
+            if (a =='Y'){
+                customers.remove(customerId);
+                System.out.println("Account holder details have been deleted.");
+            }
+            //otherwise, stop the account deletion process and return to main menu
+            else{
+                System.out.println("Operation aborted. Returning to Main Menu...");
+                //return to main menu
+                Main.menu();
+            }
+
+        }
+        //if the map does not contain the specified key, return teller to main menu
+        else {
+            System.out.println("There is no account holder associated with this ID in the system.");
+            System.out.println("Returning to the Main Menu...");
+            Main.menu();
+        }
+
     }
 }
