@@ -6,6 +6,8 @@ import java.util.*;
 
         //create a map containing the account holder as object corresponding to his own ID (Integer)
         private static Map<Integer, AccountHolder> customers = new HashMap<>();
+        AccountHolder accountHolder = new AccountHolder();
+        Scanner input = new Scanner(System.in);
 
         public static int findCustomer (int customerID) {
             int correctId=0;
@@ -23,6 +25,7 @@ import java.util.*;
 
             AccountHolder accountHolder1 = new AccountHolder(1234);
             customers.put(4, accountHolder1);
+            Main main = new Main();
             //Firstly, the teller must log into the system
             //Display message to user
             System.out.println("******* ACME BANK *******");
@@ -42,7 +45,7 @@ import java.util.*;
                 System.out.println("*************************************************************");
                 System.out.println();
 
-                menu(); // upon successful login, call menu method
+                main.menu(); // upon successful login, call menu method
 
             } else { //otherwise, the user does not have access ot the system
                 System.out.println("You are not authorised to access the system!");
@@ -73,11 +76,10 @@ import java.util.*;
             return false;
         }
 
-        public static void menu(){
+        public void menu(){
 
             //create objects of the Account Holder and Account so that we can access the methods inside the classes
-            AccountHolder accountHolder = new AccountHolder();
-            Scanner input = new Scanner(System.in);
+
 
             //display menu options to user
             System.out.println("Select one of the options:");

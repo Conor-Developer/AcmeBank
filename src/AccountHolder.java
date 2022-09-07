@@ -187,7 +187,7 @@ public class AccountHolder {
         else{
             System.out.println("Sorry, all account holders require a valid photo ID");
             //return to main menu
-            Main.menu();
+            main.menu();
         }
 
         //next, verify the customer has provided a proof of address
