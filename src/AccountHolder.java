@@ -19,16 +19,31 @@ public class AccountHolder {
 
     private boolean proofOfAddress = false; //check for photo id
 
-    protected static Map<Integer, Account> account = new HashMap<>();
+    protected Map<Integer, Account> account = new HashMap<>();
 //    private Account account; //account(s) associated with the account holder
 
+    private Scanner reader = new Scanner(System.in);
 
-    protected static void addAccount () {
-        PersonalAccount account1 = new PersonalAccount(5678, 1, AccountTypes.Personal , false);
-        account.put(8, account1);
+    //constructor
+    public AccountHolder(int id, String name, String surname, String dateOfBirth, String address, String postCode, int phoneNumber, String email, boolean photoId, boolean proofOfAddress) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.postcode = postCode;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.photoId = photoId;
+        this.proofOfAddress = proofOfAddress;
     }
 
-    public static int findAccount (int accountNumber) {
+    protected void addAccount () {
+        PersonalAccount newBankAccount = new PersonalAccount(2, 1, AccountTypes.Personal , false);
+        account.put(8, newBankAccount);
+    }
+
+    public int findAccount (int accountNumber) {
         int correctId=0;
         for(Map.Entry<Integer, Account> values: account.entrySet()) {
             int AccountId = values.getValue().getAccNumber();
@@ -121,6 +136,10 @@ public class AccountHolder {
         this.proofOfAddress = proofOfAddress;
     }
 
+    public Map<Integer, Account> getAccount() {
+        return account.getType();
+    }
+
     //get and set public methods for accessing the object Account associated with the account holder
 //    public Account getAccount() {
 //        return account;
@@ -187,7 +206,7 @@ public class AccountHolder {
         else{
             System.out.println("Sorry, all account holders require a valid photo ID");
             //return to main menu
-            main.menu();
+           // Main.menu();
         }
 
         //next, verify the customer has provided a proof of address
@@ -202,7 +221,7 @@ public class AccountHolder {
         else{
             System.out.println("Sorry, all account holders require to be UK residents.");
             //return to main menu
-            Main.menu();
+           // Main.menu();
         }
 
         //set account holder ID ,
@@ -218,79 +237,49 @@ public class AccountHolder {
 
         System.out.println("Press Enter to return to Main Menu.");
         input.nextLine();
-        Main.menu();
+      //  Main.menu();
 
         return accountHolder; //return the accountHolder object created
     }
 
     //method to retrieve a customer record
-    public AccountHolder viewAccountHolder (Scanner input, Map<Integer,AccountHolder> customers){
-        System.out.println("Enter the account holder's ID: ");
-
-        //store the user input in a customerId variable
-        Integer customerId = Integer.valueOf(input.nextLine());
-
-        //assign the customerId variable as ID map key, which would hold an account holder object, if it exists
-        AccountHolder accountHolder = customers.get(customerId);
-
-        //if there is no account holder, return user to main menu
-        if (accountHolder==null){
-            System.out.println("There is no existing account holder associated to this ID.");
-            System.out.println("Returning to the Main Menu...");
-            Main.menu();
+    public void viewAccountHolder (){
+        System.out.println("The account holder associated to the " + this.getId() + " ID is:" +"\n"  + "Full name: " + this.getName()
+                        + " " + this.getSurname() + "\n"+ "Date of birth: " + this.getDateOfBirth() + "\n" + "Address: "
+                        + this.getAddress() + "\n" + "Postcode: " + this.getPostcode() + "\n"
+                        + "Contact number: " + this.getPhoneNumber() + "\n"
+                        + "Email: " + this.getEmail() + "\n"
+                        + "Account(s) :" + this.getAccount());
         }
-        else { //if there is an object associated with this key, access the values using get() and display details to teller
-            System.out.println(" The account holder associated to the " + accountHolder.getId() + " ID is:"
-                    +"\n"  + "Full name: " + accountHolder.getName() + " " + accountHolder.getSurname()
-                    + "\n"+ "Date of birth: " + accountHolder.getDateOfBirth()
-                    + "\n" + "Address: " + accountHolder.getAddress() + ", Postcode: " + accountHolder.getPostcode()
-                    +"\n" + "Contact number: " +accountHolder.getPhoneNumber()
-//                    +"\n" + "Account(s) records: " +accountHolder.getAccount()
-            );
-        }
-        return accountHolder;
-    }
 
-    public AccountHolder updateAccountHolder (Scanner input, Map<Integer,AccountHolder> customers){
-        System.out.println("Enter the account holder's ID: ");
+    public AccountHolder updateAccountHolder(){
+        System.out.println("The account holder associated to the " + this.getId() + " ID is:" + this.getName() + " " + this.getSurname());
+        System.out.println( "Insert the following details to update the customer's details:");
+        System.out.print("First Name: ");
+        String firstName = reader.nextLine(); //add user input as account holder name
+        this.setName(firstName);
+        System.out.print("Surname: ");
+        String surname = reader.nextLine(); //add user input as account holder surname
+        this.setSurname(surname);
+        System.out.print("Date of birth: ");
+        String dob = reader.nextLine(); //add user input as account holder DOB
+        this.setDateOfBirth(dob);
+        System.out.print("Address: ");
+        String address = reader.nextLine(); //add user input as account holder address
+        this.setAddress(address);
+        System.out.print("Post code: ");
+        String postcode = reader.nextLine(); //add user input as account holder post code
+        this.setPostcode(postcode);
+        System.out.print("Contact number: ");
+        int phoneNumber = reader.nextInt(); //add user input as account holder phone number
+        this.setPhoneNumber(phoneNumber);
+        System.out.print("Email: ");
+        String email = reader.nextLine(); //add user input as account holder email
+        this.setEmail(email);
+        System.out.println();
+        System.out.print("Customer Details Updated.");
 
-        //store the user input in a customerId variable
-        Integer customerId = Integer.valueOf(input.nextLine());
-
-        //assign the customerId variable as ID map key, which would hold an account holder object, if it exists
-        AccountHolder accountHolder = customers.get(customerId);
-
-        //if there is no account holder, return user to main menu
-        if (accountHolder==null) {
-            System.out.println("There is no existing account holder associated to this ID.");
-            System.out.println( "Press Enter to return to the Main Menu.");
-            input.nextLine();
-            Main.menu();
-        } else{
-                System.out.println(" The account holder associated to the " + accountHolder.getId() + " ID is:"
-                        + accountHolder.getName() + " " + accountHolder.getSurname());
-            System.out.println( "Insert the following details to update the customer's details:");
-            System.out.println("First Name: ");
-            accountHolder.setName(input.nextLine()); //add user input as account holder name
-            System.out.println("Surname: ");
-            accountHolder.setSurname(input.nextLine()); //add user input as account holder surname
-            accountHolder.setPhotoId(true);
-            accountHolder.setProofOfAddress(true);
-            System.out.println("Address: ");
-            accountHolder.setAddress(input.nextLine()); //add user input as account holder address
-            System.out.println("Postcode: ");
-            accountHolder.setPostcode(input.nextLine()); //add user input as account holder post code
-            System.out.println("Contact number: ");
-            accountHolder.setPhoneNumber(input.nextLong()); //add user input as account holder phone number
-
-            System.out.println("Customer Details Updated.");
-
-            System.out.println( "Press Enter to return to the Main Menu.");
-            input.nextLine();
-            Main.menu();
-        }
-            //return accountHolder object
-            return accountHolder;
+        return this;
     }
 
     @Override
@@ -340,7 +329,7 @@ public class AccountHolder {
             else{
                 System.out.println("Operation aborted. Returning to Main Menu...");
                 //return to main menu
-                Main.menu();
+               // Main.menu();
             }
 
         }
@@ -348,7 +337,7 @@ public class AccountHolder {
         else {
             System.out.println("There is no account holder associated with this ID in the system.");
             System.out.println("Returning to the Main Menu...");
-            Main.menu();
+         //   Main.menu();
         }
 
     }

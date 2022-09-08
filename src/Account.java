@@ -14,7 +14,7 @@ public abstract class Account {
         this.balance = balance;
         this.type = type;
         this.incurCharges = incurCharges;
-//        this.accountHolder = accountholder;
+//        this.accountHolder = accountHolder;
     }
 
         //each account has a customer
