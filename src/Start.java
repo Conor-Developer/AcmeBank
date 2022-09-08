@@ -145,8 +145,12 @@ public class Start {
                    //  System.out.println("What kind of account do you want to create? (Personal, ISA, Business)");
                     // call method for creating a new account upon user choice
                     // PersonalAccount one = new PersonalAccount(account, balance, type, false)
-
-                 //   accountHolder.removeAccountHolder(input,customers); //call the removeAccountHolder method from AccountHolder class
+                    System.out.print("Enter Customer ID: ");
+                    customerId = input.nextInt();
+                    System.out.println();
+                    foundCustomer = findCustomer(customerId, customers);
+                    customers.get(foundCustomer).setId(-1);
+                    updateAccountHolder = customers.get(foundCustomer);
 
                     break;
                 case "5":
@@ -245,6 +249,8 @@ public class Start {
         AccountHolder updateCustomerAccount = chooseOption(input, acmeBank.getCustomerAccounts());
         if(updateCustomerAccount != null) {
             acmeBank.addCustomerAccount(updateCustomerAccount.getId(), updateCustomerAccount);
+        } else if (updateCustomerAccount.getId() == -1) {
+            acmeBank.removeCustomerAccount(updateCustomerAccount.getId());
         }
 
         updateCustomerAccount = chooseOption(input, acmeBank.getCustomerAccounts());
@@ -261,5 +267,6 @@ public class Start {
         if(updateCustomerAccount != null) {
             acmeBank.addCustomerAccount(updateCustomerAccount.getId(), updateCustomerAccount);
         }
+
     }
 }

@@ -7,6 +7,9 @@ public class Bank {
     public void addCustomerAccount(int id, AccountHolder customerAccount) {
         customerAccounts.put(id, customerAccount);
     }
+    public void removeCustomerAccount(int id) {
+        customerAccounts.remove(id);
+    }
 
     public Map<Integer, AccountHolder> getCustomerAccounts() {
         return customerAccounts;

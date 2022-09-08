@@ -41,6 +41,9 @@ public class AccountHolder {
     protected void addAccount () {
         PersonalAccount newBankAccount = new PersonalAccount(2, 1, AccountTypes.Personal , false);
         account.put(8, newBankAccount);
+        PersonalAccount newBankAccount2 = new PersonalAccount(7, 1, AccountTypes.Personal , false);
+        account.put(9, newBankAccount2);
+
     }
 
     public int findAccount (int accountNumber) {
@@ -137,9 +140,19 @@ public class AccountHolder {
     }
 
     public Map<Integer, Account> getAccount() {
-        return account.getType();
+        return account;
     }
 
+    public void getAccountInfo() {
+        AccountTypes accountInfo;
+        int accounNumber;
+        System.out.println("Accounts: ");
+        for(Map.Entry<Integer, Account> values: account.entrySet()) {
+            accountInfo =  values.getValue().getType();
+            accounNumber = values.getValue().getAccNumber();
+            System.out.println(accountInfo + " Account Number :" + accounNumber);
+        }
+    }
     //get and set public methods for accessing the object Account associated with the account holder
 //    public Account getAccount() {
 //        return account;
@@ -249,7 +262,8 @@ public class AccountHolder {
                         + this.getAddress() + "\n" + "Postcode: " + this.getPostcode() + "\n"
                         + "Contact number: " + this.getPhoneNumber() + "\n"
                         + "Email: " + this.getEmail() + "\n"
-                        + "Account(s) :" + this.getAccount());
+                        );
+        getAccountInfo();
         }
 
     public AccountHolder updateAccountHolder(){
@@ -281,6 +295,7 @@ public class AccountHolder {
 
         return this;
     }
+
 
     @Override
     public String toString() {
