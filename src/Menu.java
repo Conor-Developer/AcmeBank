@@ -23,6 +23,10 @@ public class Menu {
         menu.chooseOption();
         displayOptions();
         menu.chooseOption();
+        displayOptions();
+        menu.chooseOption();
+        displayOptions();
+        menu.chooseOption();
     }
 
     public static void welcomeScreen() {
