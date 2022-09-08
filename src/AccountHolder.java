@@ -41,7 +41,7 @@ public class AccountHolder {
         PersonalAccount newBankAccount = new PersonalAccount(2, 1, AccountTypes.Personal , false);
         account.put(newBankAccount.getAccNumber(), newBankAccount);
         PersonalAccount newBankAccount2 = new PersonalAccount(7, 1, AccountTypes.Personal , false);
-        account.put(newBankAccount.getAccNumber(), newBankAccount2);
+        account.put(newBankAccount2.getAccNumber(), newBankAccount2);
     }
 
     public int findAccount (int accountNumber) {
