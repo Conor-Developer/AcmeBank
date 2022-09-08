@@ -9,6 +9,14 @@ public abstract class Account {
         private AccountTypes type; // there can only be 3 pre-established types of accounts (enum)
         private boolean incurCharges;
 
+    public Account(int accNumber, double balance, AccountTypes type, boolean incurCharges) {
+        this.accNumber = accNumber;
+        this.balance = balance;
+        this.type = type;
+        this.incurCharges = incurCharges;
+//        this.accountHolder = accountHolder;
+    }
+
         //each account has a customer
         private AccountHolder accountHolder;
 
@@ -70,14 +78,41 @@ public abstract class Account {
             this.accountHolder = accountHolder;
         }
 
-        //generate public constructor
+        public void withdraw (double amount) {
+            this.balance -= amount;
+        }
+
+        public void deposit (double amount) {
+            this.balance += amount;
+        }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "accSortCode='" + accSortCode + '\'' +
+                ", accNumber=" + accNumber +
+                ", balance=" + balance +
+                ", type=" + type +
+                ", incurCharges=" + incurCharges +
+                ", accountHolder=" + accountHolder +
+                '}';
+    }
+
+    //generate public constructor
+
 
 
         //declare abstract methods common to all types of accounts,
         // to ensure they are implemented in each account class
-        public abstract void createAccount(); // to be personalised upon type of account
-        public abstract void checkBalance();
-        public abstract void withdraw();
-        public abstract void deposit();
+
+
+    // Commented out methods below because it's forcing
+    // child class to create these methods since they are blank in this class - Conor
+
+//        public abstract void createAccount(); // to be personalised upon type of account
+//        public abstract void checkBalance();
+//        public abstract void withdraw();
+//        public abstract void deposit();
+
 
 }
