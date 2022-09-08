@@ -107,7 +107,7 @@ public class Start {
         return correctId;
     }
 
-    public static AccountHolder chooseOption(Scanner input, Map<Integer, AccountHolder> customers) {
+    public static void chooseOption(Scanner input, Map<Integer, AccountHolder> customers) {
       //  catch user input
 
             String u = input.nextLine();
@@ -138,7 +138,7 @@ public class Start {
                     customerId = input.nextInt();
                     System.out.println();
                     foundCustomer = findCustomer(customerId, customers);
-                    updateAccountHolder = customers.get(foundCustomer).updateAccountHolder();
+                    customers.get(foundCustomer).updateAccountHolder();
                     break;
                 case "4":
 
@@ -225,7 +225,7 @@ public class Start {
                     System.out.println("Please select a valid option.");
             }
 
-        return updateAccountHolder;
+//        return updateAccountHolder;
     }
 
 
@@ -246,27 +246,27 @@ public class Start {
         welcomeScreen();
         displayOptions();
 
-        AccountHolder updateCustomerAccount = chooseOption(input, acmeBank.getCustomerAccounts());
-        if(updateCustomerAccount != null) {
-            acmeBank.addCustomerAccount(updateCustomerAccount.getId(), updateCustomerAccount);
-        } else if (updateCustomerAccount.getId() == -1) {
-            acmeBank.removeCustomerAccount(updateCustomerAccount.getId());
-        }
-
-        updateCustomerAccount = chooseOption(input, acmeBank.getCustomerAccounts());
-        if(updateCustomerAccount != null) {
-            acmeBank.addCustomerAccount(updateCustomerAccount.getId(), updateCustomerAccount);
-        }
-
-        updateCustomerAccount = chooseOption(input, acmeBank.getCustomerAccounts());
-        if(updateCustomerAccount != null) {
-            acmeBank.addCustomerAccount(updateCustomerAccount.getId(), updateCustomerAccount);
-        }
-
-        updateCustomerAccount = chooseOption(input, acmeBank.getCustomerAccounts());
-        if(updateCustomerAccount != null) {
-            acmeBank.addCustomerAccount(updateCustomerAccount.getId(), updateCustomerAccount);
-        }
+        chooseOption(input, acmeBank.getCustomerAccounts());
+//        if(updateCustomerAccount != null) {
+//            acmeBank.addCustomerAccount(updateCustomerAccount.getId(), updateCustomerAccount);
+//        } else if (updateCustomerAccount.getId() == -1) {
+//            acmeBank.removeCustomerAccount(updateCustomerAccount.getId());
+//        }
+//
+//        updateCustomerAccount = chooseOption(input, acmeBank.getCustomerAccounts());
+//        if(updateCustomerAccount != null) {
+//            acmeBank.addCustomerAccount(updateCustomerAccount.getId(), updateCustomerAccount);
+//        }
+//
+//        updateCustomerAccount = chooseOption(input, acmeBank.getCustomerAccounts());
+//        if(updateCustomerAccount != null) {
+//            acmeBank.addCustomerAccount(updateCustomerAccount.getId(), updateCustomerAccount);
+//        }
+//
+//        updateCustomerAccount = chooseOption(input, acmeBank.getCustomerAccounts());
+//        if(updateCustomerAccount != null) {
+//            acmeBank.addCustomerAccount(updateCustomerAccount.getId(), updateCustomerAccount);
+//        }
 
     }
 }

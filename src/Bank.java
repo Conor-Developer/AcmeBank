@@ -15,6 +15,17 @@ public class Bank {
         return customerAccounts;
     }
 
+    protected int findCustomer (int customerID) {
+        int correctId = 0;
+        for(Map.Entry<Integer, AccountHolder> values: customerAccounts.entrySet()) {
+            int AccountId = values.getValue().getId();
+            if (AccountId == customerID) {
+                correctId = values.getKey();
+            }
+        }
+        return correctId;
+    }
+
     @Override
     public String toString() {
         return "Bank{" +

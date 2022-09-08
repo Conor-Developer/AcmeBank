@@ -266,7 +266,7 @@ public class AccountHolder {
         getAccountInfo();
         }
 
-    public AccountHolder updateAccountHolder(){
+    public void updateAccountHolder(){
         System.out.println("The account holder associated to the " + this.getId() + " ID is:" + this.getName() + " " + this.getSurname());
         System.out.println( "Insert the following details to update the customer's details:");
         System.out.print("First Name: ");
@@ -288,12 +288,12 @@ public class AccountHolder {
         int phoneNumber = reader.nextInt(); //add user input as account holder phone number
         this.setPhoneNumber(phoneNumber);
         System.out.print("Email: ");
-        String email = reader.nextLine(); //add user input as account holder email
-        this.setEmail(email);
+        String newEmail = reader.nextLine(); //add user input as account holder email
+        this.setEmail(newEmail);
         System.out.println();
         System.out.print("Customer Details Updated.");
 
-        return this;
+//        return this;
     }
 
 
