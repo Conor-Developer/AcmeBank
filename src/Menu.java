@@ -187,6 +187,8 @@ public class Menu {
                         System.out.println("2. Withdraw");
                         System.out.println("3. Transfer  ");
                         System.out.println("4. Deposit");
+                        System.out.println("5. Standing Order");
+
 
                         String userInput = input.nextLine();
                         while (userInput.isEmpty()) {
@@ -228,6 +230,33 @@ public class Menu {
 
                                 this.bank.getCustomerAccounts().get(foundCustomer).account.get(accountId).deposit(amountToDeposit);
                                 System.out.println("You have withdrawn " + amountToDeposit + ". The new balance is " + this.bank.getCustomerAccounts().get(foundCustomer).account.get(accountId).getBalance());
+                                break;
+
+                            case "5":
+                                System.out.println("Enter the account number of the payee: ");
+                                payeeId = input.nextInt();
+                                foundPayeeBankAccount = bank.findBankAccount(payeeId);
+                                foundPayeeCustomerAccount = bank.findAccountHolderId(foundPayeeBankAccount);
+                                System.out.println("Enter Amount: ");
+                                double standingOrderAmount = input.nextDouble();
+                                System.out.println("Enter Frequency of payments");
+                                System.out.println("1. Daily");
+                                System.out.println("2. Weekly");
+                                System.out.println("3. Monthly");
+                                String choosePaymentOptions = input.nextLine();
+                                String frequency;
+                                switch (choosePaymentOptions) {
+                                    case "1":
+                                        frequency = "daily";
+                                        break;
+                                    case "2":
+                                        frequency = "weekly";
+                                        break;
+                                    case "3":
+                                        frequency = "monthly";
+                                        break;
+                                }
+                                break;
                         }
                         break;
                     case ISA :
@@ -236,6 +265,7 @@ public class Menu {
                     case Business:
                         System.out.println("1. ");
                         System.out.println("2. ");
+                        System.out.println("4. Direct Debit");
                 }
 
                 break;
