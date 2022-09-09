@@ -4,7 +4,13 @@ import java.util.Scanner;
 
 public class AccountHolder {
 
-    //declare private variables - encapsulation
+
+    //**************
+    //Comment1
+    //COmment 2
+    //Comment 3
+    //************
+// declare private variables - encapsulation
 
     private int id; //unique account holder Id
     private String name; // name of account holder
