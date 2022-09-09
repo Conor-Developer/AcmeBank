@@ -9,6 +9,9 @@ public abstract class Account {
         private final String accSortCode = "xx-xx-xx";
 
         private double balance;
+
+        private double loanBalance;
+
         private AccountTypes type; // there can only be 3 pre-established types of accounts (enum)
         private boolean incurCharges;
 
@@ -45,6 +48,10 @@ public abstract class Account {
         public double getBalance() {
             return balance;
         }
+
+        public double getLoanBalance() {return loanBalance;}
+
+    public void setLoanBalance(double loanBalance) {this.loanBalance = loanBalance;}
 
         //set balance
         public void setBalance(double balance) {
@@ -87,6 +94,11 @@ public abstract class Account {
 
         public void deposit (double amount) {
             this.balance += amount;
+        }
+
+        public void loan (double amount) {
+            System.out.println("This doesnt allow a loan");
+
         }
 
 
