@@ -26,6 +26,35 @@ public class Bank {
         return correctId;
     }
 
+    protected int findBankAccount(int accountNumber) {
+        int correctBankAcountNumber = 0;
+
+        for(Map.Entry<Integer, AccountHolder> customerAccount: customerAccounts.entrySet()) {
+            for(Map.Entry<Integer, Account> bankAccount: customerAccount.getValue().getAccount().entrySet()) {
+                int bankAccountId = bankAccount.getValue().getAccNumber();
+                if(bankAccountId == accountNumber) {
+                    correctBankAcountNumber = bankAccountId;
+                }
+            }
+        }
+        return correctBankAcountNumber;
+    }
+
+    protected int findAccountHolderId(int bankAccountNumber) {
+        int correctAccountNumber = 0;
+
+        for(Map.Entry<Integer, AccountHolder> customerAccount: customerAccounts.entrySet()) {
+            for(Map.Entry<Integer, Account> bankAccount: customerAccount.getValue().getAccount().entrySet()) {
+                int customerAccountId = bankAccount.getValue().getAccNumber();
+                if(customerAccountId == bankAccountNumber) {
+                    correctAccountNumber = customerAccount.getValue().getId();
+                }
+            }
+        }
+        return correctAccountNumber;
+    }
+
+
     @Override
     public String toString() {
         return "Bank{" +

@@ -89,6 +89,9 @@ public abstract class Account {
             this.balance += amount;
         }
 
+
+        protected void transfer(double balance) {}
+
     @Override
     public String toString() {
         return "Account{" +
