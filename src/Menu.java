@@ -187,6 +187,7 @@ public class Menu {
                         System.out.println("2. Withdraw");
                         System.out.println("3. Transfer  ");
                         System.out.println("4. Deposit");
+                        System.out.println("5. Standing Order");
                         System.out.println("7. Create Loan");
                         System.out.println("8. Pay Loan");
 
@@ -232,6 +233,32 @@ public class Menu {
                                 System.out.println("You deposited " + amountToDeposit + ". The new balance is " + this.bank.getCustomerAccounts().get(foundCustomer).account.get(accountId).getBalance());
                                 break;
 
+                            case "5":
+                                System.out.println("Enter the account number of the payee: ");
+                                payeeId = input.nextInt();
+                                foundPayeeBankAccount = bank.findBankAccount(payeeId);
+                                foundPayeeCustomerAccount = bank.findAccountHolderId(foundPayeeBankAccount);
+                                System.out.println("Enter Amount: ");
+                                double standingOrderAmount = input.nextDouble();
+                                System.out.println("Enter Frequency of payments");
+                                System.out.println("1. Daily");
+                                System.out.println("2. Weekly");
+                                System.out.println("3. Monthly");
+                                String choosePaymentOptions = input.nextLine();
+                                String frequency;
+                                switch (choosePaymentOptions) {
+                                    case "1":
+                                        frequency = "daily";
+                                        break;
+                                    case "2":
+                                        frequency = "weekly";
+                                        break;
+                                    case "3":
+                                        frequency = "monthly";
+                                        break;
+                                }
+                                break;
+
                             case "7":
                                 System.out.println("How much loan do you require: ");
                                 double amountToLoan = input.nextDouble();
@@ -261,7 +288,6 @@ public class Menu {
                                 System.out.println("This is the amount to pay loan " + amountToPayLoan);
                                 System.out.println("This is the loan balance " + loanBalance);
                                 break;
-
                         }
                         break;
                     case ISA :
@@ -270,6 +296,7 @@ public class Menu {
                     case Business:
                         System.out.println("1. ");
                         System.out.println("2. ");
+                        System.out.println("4. Direct Debit");
                 }
 
                 break;
