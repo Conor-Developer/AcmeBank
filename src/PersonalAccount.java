@@ -7,12 +7,10 @@ public class PersonalAccount extends Account {
         this.tempBalance = this.getBalance();
     }
 
+    @Override
     protected void transfer(double balance) {
         this.setBalance((this.getBalance() - balance));
     }
-
-
-
 }
 
 

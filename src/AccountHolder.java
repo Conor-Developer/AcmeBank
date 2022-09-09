@@ -44,6 +44,7 @@ public class AccountHolder {
         if (type == AccountTypes.Personal) {
             newAccount = new PersonalAccount(1, type , false);
             account.put(newAccount.getAccNumber(), newAccount);
+            System.out.println(newAccount.toString());
         } else if (type == AccountTypes.ISA) {
             newAccount = new ISAAccount(1, type, false);
             account.put(newAccount.getAccNumber(), newAccount);
@@ -54,19 +55,6 @@ public class AccountHolder {
         System.out.println(newAccount.getType() + " account created successfully. ID is " + newAccount.getAccNumber());
     }
 
-    public int findAccount (int accountNumber) {
-        int correctId=0;
-        for(Map.Entry<Integer, Account> values: account.entrySet()) {
-            int AccountId = values.getValue().getAccNumber();
-//                System.out.println( AccountId);
-            if (AccountId == accountNumber) {
-                correctId = values.getKey();
-            }
-        }
-        return correctId;
-    }
-
-    //access private variables through public methods
 
     //get and set account holder id
     public int getId() {
@@ -163,37 +151,6 @@ public class AccountHolder {
         }
         System.out.println();
     }
-    //get and set public methods for accessing the object Account associated with the account holder
-//    public Account getAccount() {
-//        return account;
-//    }
-//    public void setAccount(Account account) {
-//        this.account = account;
-//    }
-
-
-    /*
-    //constructor
-    public AccountHolder(int id, String name, String surname, String dateOfBirth, String address, String postCode, int phoneNumber, String email, boolean photoId, boolean proofOfAddress, Account account) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.dateOfBirth = dateOfBirth;
-        this.address = address;
-        this.postCode = postCode;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.photoId = photoId;
-        this.proofOfAddress = proofOfAddress;
-        this.account = account;
-    }
-    */
-    //empty constructor
-
-
-    public AccountHolder() {
-    }
-
 
     //method to retrieve a customer record
     public void viewAccountHolder (){
@@ -257,48 +214,5 @@ public class AccountHolder {
                 ", account=" + account +
                 '}';
     }
-
-
-
-    //method to remove an account holder , using the ID key
-//    public void removeAccountHolder (Scanner input, Map<Integer,AccountHolder> customers) {
-//
-//        // we search for the account holder by ID
-//        System.out.println("Enter the account holder's ID: ");
-//
-//        //store the user input in a customerId variable
-//        Integer customerId = Integer.valueOf(input.nextLine());
-//
-//        //instantiate an accountHolder object which would have the
-//        // use the customerId variable as key ID (Account Holder Map)
-//        AccountHolder accountHolder = customers.get(customerId);
-//
-//        //if the map contains key display full name of the account holder and confirm request to delete data
-//        if (customers.containsKey(customerId)){
-//            System.out.println(" The account holder associated to the " + accountHolder.getId() + " ID is:"
-//                    +"\n"  + "Full name: " + accountHolder.getName() + " " + accountHolder.getSurname()
-//                    +"\n" + "Are you sure you want to delete this record? Y /N ");
-//            char a = input.next().charAt(0);
-//            // if user confirms, remove accountHolder object referring to this ID key
-//            if (a =='Y'){
-//                customers.remove(customerId);
-//                System.out.println("Account holder details have been deleted.");
-//            }
-//            //otherwise, stop the account deletion process and return to main menu
-//            else{
-//                System.out.println("Operation aborted. Returning to Main Menu...");
-//                //return to main menu
-//               // Main.menu();
-//            }
-//
-//        }
-//        //if the map does not contain the specified key, return teller to main menu
-//        else {
-//            System.out.println("There is no account holder associated with this ID in the system.");
-//            System.out.println("Returning to the Main Menu...");
-//         //   Main.menu();
-//        }
-//
-//    }
 
 }
