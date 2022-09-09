@@ -1,8 +1,7 @@
-public class PersonalAccount extends Account {
-
+public class BusinessAccount extends Account{
     double tempBalance;
 
-    PersonalAccount( double balance, AccountTypes accountType, boolean incurCharges) {
+    BusinessAccount( double balance, AccountTypes accountType, boolean incurCharges) {
         super(balance, accountType, incurCharges);
         this.tempBalance = this.getBalance();
     }
@@ -12,7 +11,4 @@ public class PersonalAccount extends Account {
     }
 
 
-
 }
-
-

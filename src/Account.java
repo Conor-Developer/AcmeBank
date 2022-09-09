@@ -3,18 +3,21 @@ public abstract class Account {
         //declare variables as private - encapsulation
 
         //account sort code is final as all accounts have the same sort code
-        private final String accSortCode = "xx-xx-xx";
+        private static int nextAccNumber = 2000;
         private int accNumber; //needs to be unique
+
+        private final String accSortCode = "xx-xx-xx";
+
         private double balance;
         private AccountTypes type; // there can only be 3 pre-established types of accounts (enum)
         private boolean incurCharges;
 
-    public Account(int accNumber, double balance, AccountTypes type, boolean incurCharges) {
-        this.accNumber = accNumber;
+    public Account(double balance, AccountTypes type, boolean incurCharges) {
+        this.accNumber = nextAccNumber;
+        nextAccNumber++;
         this.balance = balance;
         this.type = type;
         this.incurCharges = incurCharges;
-//        this.accountHolder = accountHolder;
     }
 
         //each account has a customer
