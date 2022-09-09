@@ -187,6 +187,8 @@ public class Menu {
                         System.out.println("2. Withdraw");
                         System.out.println("3. Transfer  ");
                         System.out.println("4. Deposit");
+                        System.out.println("7. Create Loan");
+                        System.out.println("8. Pay Loan");
 
                         String userInput = input.nextLine();
                         while (userInput.isEmpty()) {
@@ -227,7 +229,39 @@ public class Menu {
                                 double amountToDeposit = input.nextDouble();
 
                                 this.bank.getCustomerAccounts().get(foundCustomer).account.get(accountId).deposit(amountToDeposit);
-                                System.out.println("You have withdrawn " + amountToDeposit + ". The new balance is " + this.bank.getCustomerAccounts().get(foundCustomer).account.get(accountId).getBalance());
+                                System.out.println("You deposited " + amountToDeposit + ". The new balance is " + this.bank.getCustomerAccounts().get(foundCustomer).account.get(accountId).getBalance());
+                                break;
+
+                            case "7":
+                                System.out.println("How much loan do you require: ");
+                                double amountToLoan = input.nextDouble();
+
+                                this.bank.getCustomerAccounts().get(foundCustomer).account.get(accountId).loan(amountToLoan);
+                                System.out.println("You have received " + amountToLoan + ". The new balance is " + this.bank.getCustomerAccounts().get(foundCustomer).account.get(accountId).getBalance());
+                                //number of payments, monthly payments, (Loan calculator?), interest
+                                break;
+                            case "8":
+                                System.out.println("How much loan do you want to pay: ");
+                                double amountToPayLoan = input.nextDouble();
+                                double loanBalance = this.bank.getCustomerAccounts().get(foundCustomer).account.get(accountId).getLoanBalance();
+                                double existingBalance = this.bank.getCustomerAccounts().get(foundCustomer).account.get(accountId).getBalance();
+
+
+                                if (existingBalance >= amountToPayLoan && amountToPayLoan <= loanBalance) {
+                                    this.bank.getCustomerAccounts().get(foundCustomer).account.get(accountId).setBalance(existingBalance-amountToPayLoan);
+                                    this.bank.getCustomerAccounts().get(foundCustomer).account.get(accountId).setLoanBalance(loanBalance-amountToPayLoan);
+                                } else if (amountToPayLoan > loanBalance){
+                                    System.out.println("You are attempting to pay more than your loan balance. Please try again.");
+                                } else  {
+                                    System.out.println("You do not have sufficient funds to pay towards your loan balance.");
+                                }
+                                loanBalance = this.bank.getCustomerAccounts().get(foundCustomer).account.get(accountId).getLoanBalance();
+
+                                System.out.println("This is the existing balance " + existingBalance);
+                                System.out.println("This is the amount to pay loan " + amountToPayLoan);
+                                System.out.println("This is the loan balance " + loanBalance);
+                                break;
+
                         }
                         break;
                     case ISA :

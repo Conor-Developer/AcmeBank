@@ -6,6 +6,11 @@ public class PersonalAccount extends Account {
         super(balance, accountType, incurCharges);
         this.tempBalance = this.getBalance();
     }
+    @Override
+    public void loan (double amount) {
+        this.setBalance(this.getBalance() + amount);
+    this.setLoanBalance(amount);
+    }
 
     @Override
     protected void transfer(double balance) {
