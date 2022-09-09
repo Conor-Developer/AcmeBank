@@ -13,8 +13,9 @@ public class Menu {
     public static void main(String[] args) {
         Bank acmeBank = new Bank();
         Menu menu = new Menu(acmeBank);
-        AccountHolder newAccountHolderExample = new AccountHolder(1, "Conor", "Hope", "16/11/94", "London", "E10", 07435435, "gmail", true, true);
-        newAccountHolderExample.addAccount();
+        AccountHolder newAccountHolderExample = new AccountHolder("Conor", "Hope", "16/11/94", "London", "E10", 07435435, "gmail", true, true);
+        newAccountHolderExample.addAccount(AccountTypes.Personal);
+        System.out.println(newAccountHolderExample.getId());
         menu.bank.addCustomerAccount(newAccountHolderExample.getId(), newAccountHolderExample);
         welcomeScreen();
         displayOptions();
@@ -101,14 +102,10 @@ public class Menu {
             // Main.menu();
         }
 
-        //set account holder ID ,
-        // on the assumption that the teller will introduce a unique ID each time ( eg based on passport or NI number)
-        System.out.println("Insert account holder unique ID: ");
-        int id = input.nextInt();
 
         // =============== NEW ACCOUNT HOLDER CREATED =================================
         // call the createAccountHolder method from the AccountHolder class, and assign it to the accountHolder object created
-        AccountHolder newAccountHolder = new AccountHolder(id, firstName, lastName, dob, address, postcode, contactNumber, email, photoId, proofOfAddress );
+        AccountHolder newAccountHolder = new AccountHolder(firstName, lastName, dob, address, postcode, contactNumber, email, photoId, proofOfAddress );
         // create map entry using the ID and the account holder object
         this.bank.addCustomerAccount(newAccountHolder.getId(), newAccountHolder);
 
@@ -226,7 +223,32 @@ public class Menu {
                 break;
             case "6":
                 // call method for creating a new account upon user choice
-                System.out.println("What kind of account do you want to create? (Personal, ISA, Business)");
+                System.out.print("Enter Customer ID: ");
+                customerId = input.nextInt();
+                System.out.println();
+                foundCustomer = bank.findCustomer(customerId);
+                System.out.println(foundCustomer);
+                System.out.println("What kind of account do you want to create?");
+                System.out.println("1. Personal account");
+                System.out.println("2. ISA account");
+                System.out.println("3. Business account");
+                String option = input.nextLine();
+                while (option.isEmpty()) {
+                            System.out.println("No input detected. Please choose one option. ");
+                            option = input.nextLine();
+                        }
+                switch (option) {
+                    case "1":
+                        this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.Personal);
+                        break;
+                    case "2":
+                        this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.ISA);
+                        break;
+                    case "3":
+                        this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.Business);
+                        break;
+                }
+
                 break;
             case "7":
                 System.out.print("Enter Customer ID: ");

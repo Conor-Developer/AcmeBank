@@ -4,14 +4,9 @@ import java.util.Scanner;
 
 public class AccountHolder {
 
-
-    //**************
-    //Comment1
-    //COmment 2
-    //Comment 3
-    //************
 // declare private variables - encapsulation
 
+    private static int nextId = 4000;
     private int id; //unique account holder Id
     private String name; // name of account holder
     private String surname; //surname of account holder
@@ -30,8 +25,9 @@ public class AccountHolder {
     private Scanner reader = new Scanner(System.in);
 
     //constructor
-    public AccountHolder(int id, String name, String surname, String dateOfBirth, String address, String postCode, int phoneNumber, String email, boolean photoId, boolean proofOfAddress) {
-        this.id = id;
+    public AccountHolder(String name, String surname, String dateOfBirth, String address, String postCode, int phoneNumber, String email, boolean photoId, boolean proofOfAddress) {
+        this.id = nextId;
+        nextId++;
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
@@ -43,11 +39,19 @@ public class AccountHolder {
         this.proofOfAddress = proofOfAddress;
     }
 
-    protected void addAccount () {
-        PersonalAccount newBankAccount = new PersonalAccount(2, 1, AccountTypes.Personal , false);
-        account.put(newBankAccount.getAccNumber(), newBankAccount);
-        PersonalAccount newBankAccount2 = new PersonalAccount(7, 1, AccountTypes.Personal , false);
-        account.put(newBankAccount2.getAccNumber(), newBankAccount2);
+    protected void addAccount (AccountTypes type) {
+        Account newAccount;
+        if (type == AccountTypes.Personal) {
+            newAccount = new PersonalAccount(1, type , false);
+            account.put(newAccount.getAccNumber(), newAccount);
+        } else if (type == AccountTypes.ISA) {
+            newAccount = new ISAAccount(1, type, false);
+            account.put(newAccount.getAccNumber(), newAccount);
+        } else {
+            newAccount = new BusinessAccount(7, type , false);
+            account.put(newAccount.getAccNumber(), newAccount);
+        }
+        System.out.println(newAccount.getType() + " account created successfully. ID is " + newAccount.getAccNumber());
     }
 
     public int findAccount (int accountNumber) {
@@ -186,89 +190,10 @@ public class AccountHolder {
     */
     //empty constructor
 
-    public AccountHolder(int id) {
-        this.id = id;
-    }
 
     public AccountHolder() {
     }
 
-    //method to create a new account holder and store it as an object
-    public AccountHolder createAccountHolder(Scanner input){
-
-        //create object of the AccountHolder
-        AccountHolder accountHolder = new AccountHolder();
-
-        //Output "create account" script and instructions to the teller
-        System.out.println("Please insert the following details:");
-        System.out.print("First Name: ");
-        accountHolder.setName(input.nextLine()); //add user input as account holder name
-        System.out.print("Surname: ");
-        accountHolder.setSurname(input.nextLine()); //add user input as account holder surname
-        System.out.print("Date of birth: ");
-        accountHolder.setDateOfBirth(input.nextLine()); //add user input as account holder DOB
-        System.out.print("Address: ");
-        accountHolder.setAddress(input.nextLine()); //add user input as account holder address
-        System.out.print("Post code: ");
-        accountHolder.setPostcode(input.nextLine()); //add user input as account holder post code
-        System.out.print("Contact number: ");
-        accountHolder.setPhoneNumber(input.nextLong()); //add user input as account holder phone number
-        System.out.print("Email: ");
-        accountHolder.setEmail(input.nextLine()); //add user input as account holder email
-        //verify the customer has provided photo ID
-        System.out.println("Identification provided? Y / N");
-        //take as user input only the first character (index 0)
-        char p = input.next().charAt(0);
-
-
-        //if yes, set boolean photoId to being true§ (false by default)
-
-        if (p=='Y'){
-            accountHolder.setPhotoId(true);
-        }
-        //if not, the user will not be able to register a new customer
-        else{
-            System.out.println("Sorry, all account holders require a valid photo ID");
-            //return to main menu
-
-           // Main.menu();
-
-        }
-
-        //next, verify the customer has provided a proof of address
-        System.out.println("Proof of Address provided? Y / N");
-        char a = input.next().charAt(0);
-
-        // if yes, set the boolean as true
-        if (a =='Y'){
-            accountHolder.setProofOfAddress(true);
-        }
-        //else, stop the registration process and return to main menu
-        else{
-            System.out.println("Sorry, all account holders require to be UK residents.");
-            //return to main menu
-
-           // Main.menu();
-        }
-
-        //set account holder ID ,
-        // on the assumption that the teller will introduce an unique ID each time ( eg based on passport or NI number)
-        System.out.println("Insert account holder unique ID: ");
-        accountHolder.setId(input.nextInt());
-
-        System.out.println("Done. " + accountHolder.name + " " + accountHolder.surname
-                + " has the following ID: " + accountHolder.getId());
-
-
-
-        //next, call method to create a bank account?
-
-        System.out.println("Press Enter to return to Main Menu.");
-        input.nextLine();
-
-
-        return accountHolder; //return the accountHolder object created
-    }
 
     //method to retrieve a customer record
     public void viewAccountHolder (){

@@ -1,8 +1,7 @@
-public class PersonalAccount extends Account {
-
+public class ISAAccount extends Account{
     double tempBalance;
 
-    PersonalAccount( double balance, AccountTypes accountType, boolean incurCharges) {
+    ISAAccount( double balance, AccountTypes accountType, boolean incurCharges) {
         super(balance, accountType, incurCharges);
         this.tempBalance = this.getBalance();
     }
@@ -14,5 +13,3 @@ public class PersonalAccount extends Account {
 
 
 }
-
-
