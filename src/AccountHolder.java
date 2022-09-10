@@ -4,28 +4,28 @@ import java.util.Scanner;
 
 public class AccountHolder {
 
-// declare private variables - encapsulation
-
     private static int nextId = 4000;
-    private int id; //unique account holder Id
-    private String name; // name of account holder
-    private String surname; //surname of account holder
-    private String dateOfBirth; // date of birth of the account holder
-    private String address; //address of account holder
-    private String postcode; //postcode of account holder
-    private long phoneNumber; //contact number for the account holder
-    private String email; //email of account holder
+    private final int id;
+    private String name;
+    private String surname;
+    private String dateOfBirth;
+    private String address;
+    private String postcode;
+    private String phoneNumber;
+    private String email;
 
-    private boolean photoId = false; //check for photo id
+    private final boolean photoId;
 
-    private boolean proofOfAddress = false; //check for photo id
-    protected Map<Integer, Account> account = new HashMap<>();
-//    private Account account; //account(s) associated with the account holder
+    private final boolean proofOfAddress;
 
-    private Scanner reader = new Scanner(System.in);
+    //Hashmap of Bank accounts
+    private final Map<Integer, Account> account = new HashMap<>();
 
-    //constructor
-    public AccountHolder(String name, String surname, String dateOfBirth, String address, String postCode, int phoneNumber, String email, boolean photoId, boolean proofOfAddress) {
+
+    private final Scanner reader = new Scanner(System.in);
+
+
+    public AccountHolder(String name, String surname, String dateOfBirth, String address, String postCode, String phoneNumber, String email, boolean photoId, boolean proofOfAddress) {
         this.id = nextId;
         nextId++;
         this.name = name;
@@ -44,7 +44,7 @@ public class AccountHolder {
         if (type == AccountTypes.Personal) {
             newAccount = new PersonalAccount(1, type , false);
             account.put(newAccount.getAccNumber(), newAccount);
-            System.out.println(newAccount.toString());
+            System.out.println(newAccount);
         } else if (type == AccountTypes.ISA) {
             newAccount = new ISAAccount(1, type, false);
             account.put(newAccount.getAccNumber(), newAccount);
@@ -56,15 +56,10 @@ public class AccountHolder {
     }
 
 
-    //get and set account holder id
     public int getId() {
         return id;
     }
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    //get and set public methods for account holder name
     public String getName() {
         return name;
     }
@@ -72,7 +67,6 @@ public class AccountHolder {
         this.name = name;
     }
 
-    //get and set public methods for account holder name
     public String getSurname() {
         return surname;
     }
@@ -80,7 +74,6 @@ public class AccountHolder {
         this.surname = surname;
     }
 
-    //get and set public methods for account holder date of birth
     public String getDateOfBirth() {
         return dateOfBirth;
     }
@@ -88,7 +81,6 @@ public class AccountHolder {
         this.dateOfBirth = dateOfBirth;
     }
 
-    //get and set public methods for account holder address
     public String getAddress() {
         return address;
     }
@@ -96,7 +88,6 @@ public class AccountHolder {
         this.address = address;
     }
 
-    ////get and set public methods for account holder post code
     public String getPostcode() {
         return postcode;
     }
@@ -104,36 +95,18 @@ public class AccountHolder {
         this.postcode = postcode;
     }
 
-    //get and set public methods for account holder phone number
-    public long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
-    public void setPhoneNumber(long phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    //get and set public methods for account holder email
     public String getEmail() {
         return email;
     }
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    //get and set public methods for account holder photoId
-    public boolean isPhotoId() {
-        return photoId;
-    }
-    public void setPhotoId(boolean photoId) {
-        this.photoId = photoId;
-    }
-
-    //get and set public methods for account holder PoA
-    public boolean isProofOfAddress() {
-        return proofOfAddress;
-    }
-    public void setProofOfAddress(boolean proofOfAddress) {
-        this.proofOfAddress = proofOfAddress;
     }
 
     public Map<Integer, Account> getAccount() {
@@ -142,17 +115,16 @@ public class AccountHolder {
 
     public void getAccountInfo() {
         AccountTypes accountInfo;
-        int accounNumber;
+        int accountNumber;
         System.out.println("Accounts: ");
         for(Map.Entry<Integer, Account> values: account.entrySet()) {
             accountInfo =  values.getValue().getType();
-            accounNumber = values.getValue().getAccNumber();
-            System.out.println(accountInfo + " Account Number: " + accounNumber);
+            accountNumber = values.getValue().getAccNumber();
+            System.out.println(accountInfo + " Account Number: " + accountNumber);
         }
         System.out.println();
     }
 
-    //method to retrieve a customer record
     public void viewAccountHolder (){
         System.out.println("The account holder associated to the " + this.getId() + " ID is:" +"\n"  + "Full name: " + this.getName()
                         + " " + this.getSurname() + "\n"+ "Date of birth: " + this.getDateOfBirth() + "\n" + "Address: "
@@ -167,30 +139,27 @@ public class AccountHolder {
         System.out.println("The account holder associated to the " + this.getId() + " ID is:" + this.getName() + " " + this.getSurname());
         System.out.println( "Insert the following details to update the customer's details:");
         System.out.print("First Name: ");
-        String firstName = reader.nextLine(); //add user input as account holder name
+        String firstName = reader.nextLine();
         this.setName(firstName);
         System.out.print("Surname: ");
-        String surname = reader.nextLine(); //add user input as account holder surname
+        String surname = reader.nextLine();
         this.setSurname(surname);
         System.out.print("Date of birth: ");
-        String dob = reader.nextLine(); //add user input as account holder DOB
+        String dob = reader.nextLine();
         this.setDateOfBirth(dob);
         System.out.print("Address: ");
-        String address = reader.nextLine(); //add user input as account holder address
+        String address = reader.nextLine();
         this.setAddress(address);
         System.out.print("Post code: ");
-        String postcode = reader.nextLine(); //add user input as account holder post code
+        String postcode = reader.nextLine();
         this.setPostcode(postcode);
         System.out.print("Email: ");
-        String newEmail = reader.nextLine(); //add user input as account holder email
+        String newEmail = reader.nextLine();
         this.setEmail(newEmail);
         System.out.print("Contact number: ");
-        int phoneNumber = reader.nextInt(); //add user input as account holder phone number
+        String phoneNumber = reader.nextLine();
         this.setPhoneNumber(phoneNumber);
-      //  System.out.println();
         System.out.print("Customer Details Updated.");
-
-//        return this;
     }
 
     protected void removeCustomerAccount(int id) {
