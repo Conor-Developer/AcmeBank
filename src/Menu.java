@@ -1,3 +1,4 @@
+import javax.swing.text.StyledEditorKit;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -7,6 +8,8 @@ public class Menu {
     Scanner input = new Scanner(System.in);
     Bank bank;
 
+    Boolean running = true;
+
 
     public Menu(Bank bank) {
         this.bank = bank;
@@ -15,30 +18,21 @@ public class Menu {
     public static void main(String[] args) {
         Bank acmeBank = new Bank();
         Menu menu = new Menu(acmeBank);
-        AccountHolder newAccountHolderExample = new AccountHolder("Conor", "Hope", "16/11/94", "London", "E10", 07435435, "gmail", true, true);
+//         Two test accounts created for testing.
+        AccountHolder newAccountHolderExample = new AccountHolder("Conor", "Hope", "01/12/64", "London", "E10", 07435435, "gmail", true, true);
         newAccountHolderExample.addAccount(AccountTypes.Personal);
 
-        AccountHolder newAccountHolderExample2 = new AccountHolder("Conor", "Hope", "16/11/94", "London", "E10", 07435435, "gmail", true, true);
+        AccountHolder newAccountHolderExample2 = new AccountHolder("Asif", "Alam", "29/10/99", "London", "E12", 074234455, "gmail", true, true);
         newAccountHolderExample2.addAccount(AccountTypes.Personal);
 
         menu.bank.addCustomerAccount(newAccountHolderExample.getId(), newAccountHolderExample);
         menu.bank.addCustomerAccount(newAccountHolderExample2.getId(), newAccountHolderExample2);
-        System.out.println();
-        System.out.println("**********");
-        System.out.println(menu.bank.findBankAccount(4444));
-
 
         welcomeScreen();
-        displayOptions();
-        menu.chooseOption();
-        displayOptions();
-        menu.chooseOption();
-        displayOptions();
-        menu.chooseOption();
-        displayOptions();
-        menu.chooseOption();
-        displayOptions();
-        menu.chooseOption();
+        while (menu.running) {
+            displayOptions();
+            menu.chooseOption();
+        }
     }
 
     public static void welcomeScreen() {
@@ -46,8 +40,6 @@ public class Menu {
         System.out.println("Authorised Personnel Only!");
         System.out.println();
 
-//        String username="Admin";
-//        String password = "Password1234";
         Scanner input = new Scanner(System.in);
     }
 
@@ -59,6 +51,7 @@ public class Menu {
         System.out.println("5. View Bank Account");
         System.out.println("6. Create New Bank Account");
         System.out.println("7. Delete Bank Account");
+        System.out.println("8. Exit");
         System.out.println();
         System.out.print("Select one of the options: ");
     }
@@ -122,12 +115,11 @@ public class Menu {
 
         System.out.println("Done. " + newAccountHolder.getName() + " " + newAccountHolder.getSurname() + " has the following ID: " + newAccountHolder.getId());
 
+    }
 
-//        next, call method to create a bank account?
-//        System.out.println("Press Enter to return to Main Menu.");
-//        input.nextLine();
-//        Main.menu();
-//        return newAccountHolder;
+    protected void login () {
+        String username="Admin";
+        String password = "Password1234";
     }
 
     protected void chooseOption() {
@@ -260,6 +252,7 @@ public class Menu {
                                         frequency = "monthly";
                                         break;
                                 }
+
                                 System.out.println("When do you want the payments to start?: ");
                                 String startDateInput = input.nextLine();
                                 DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -271,6 +264,7 @@ public class Menu {
                                 LocalDate standingOrderEndDate = LocalDate.parse(endDateInput, dateFormat);
                                 System.out.println("Your payments will end on " + String.format(endDateInput));
                                 this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setStandingOrderEndDate(standingOrderEndDate);
+
                                 break;
 
                             case "7":
@@ -355,6 +349,9 @@ public class Menu {
                 this.bank.getCustomerAccounts().get(foundCustomer).removeCustomerAccount(accountId);
 
                 System.out.println("The account has been deleted");
+                break;
+            case "8":
+                running = false;
                 break;
             default:
                 System.out.println("Please select a valid option.");
