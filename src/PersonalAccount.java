@@ -1,4 +1,6 @@
-public class PersonalAccount extends Account {
+import java.time.LocalDate;
+
+public class PersonalAccount extends Account{
 
     double tempBalance;
 
@@ -16,6 +18,7 @@ public class PersonalAccount extends Account {
     protected void transfer(double balance) {
         this.setBalance((this.getBalance() - balance));
     }
+
 }
 
 

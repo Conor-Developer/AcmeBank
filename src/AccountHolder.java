@@ -19,7 +19,7 @@ public class AccountHolder {
     private boolean photoId = false; //check for photo id
 
     private boolean proofOfAddress = false; //check for photo id
-    protected Map<Integer, Account> account = new HashMap<>();
+    private Map<Integer, Account> account = new HashMap<>();
 //    private Account account; //account(s) associated with the account holder
 
     private Scanner reader = new Scanner(System.in);

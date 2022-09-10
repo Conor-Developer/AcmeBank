@@ -1,4 +1,6 @@
-public abstract class Account {
+import java.time.LocalDate;
+
+public abstract class Account  implements StandingOrder{
 
         //declare variables as private - encapsulation
 
@@ -14,6 +16,11 @@ public abstract class Account {
 
         private AccountTypes type; // there can only be 3 pre-established types of accounts (enum)
         private boolean incurCharges;
+
+        private LocalDate standingOrderCreationDate;
+
+        private LocalDate standingOrderEndDate;
+
 
     public Account(double balance, AccountTypes type, boolean incurCharges) {
         this.accNumber = nextAccNumber;
@@ -51,7 +58,7 @@ public abstract class Account {
 
         public double getLoanBalance() {return loanBalance;}
 
-    public void setLoanBalance(double loanBalance) {this.loanBalance = loanBalance;}
+        public void setLoanBalance(double loanBalance) {this.loanBalance = loanBalance;}
 
         //set balance
         public void setBalance(double balance) {
@@ -103,6 +110,24 @@ public abstract class Account {
 
 
         protected void transfer(double balance) {}
+
+        public LocalDate getStandingOrderCreationDate() {
+            return standingOrderCreationDate;
+        }
+
+        public void setStandingOrderCreationDate(LocalDate standingOrderCreationDate) {
+            this.standingOrderCreationDate = standingOrderCreationDate;
+        }
+
+        public LocalDate getStandingOrderEndDate() {
+            return standingOrderEndDate;
+        }
+
+        public void setStandingOrderEndDate(LocalDate standingOrderEndDate) {
+            this.standingOrderEndDate = standingOrderEndDate;
+        }
+
+
 
     @Override
     public String toString() {
