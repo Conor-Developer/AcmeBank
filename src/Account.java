@@ -1,20 +1,14 @@
 import java.time.LocalDate;
 
 public abstract class Account  implements StandingOrder{
-
-        //declare variables as private - encapsulation
-
-        //account sort code is final as all accounts have the same sort code
         private static int nextAccNumber = 2000;
-        private int accNumber; //needs to be unique
+        private final int accNumber; //needs to be unique
 
-        private final String accSortCode = "xx-xx-xx";
-
-        private double balance;
+    private double balance;
 
         private double loanBalance;
 
-        private AccountTypes type; // there can only be 3 pre-established types of accounts (enum)
+        private final AccountTypes type;
         private boolean incurCharges;
 
         private LocalDate standingOrderCreationDate;
@@ -30,28 +24,11 @@ public abstract class Account  implements StandingOrder{
         this.incurCharges = incurCharges;
     }
 
-        //each account has a customer
-        private AccountHolder accountHolder;
-
-        //access private variables via public methods
-        //getters and setters
-
-        //get account sort code (no need to set as it has been declared as final
-        public String getAccSortCode() {
-            return accSortCode;
-        }
-
-        // get account number
         public int getAccNumber() {
             return accNumber;
         }
 
-        //set account number
-        public void setAccNumber(int accNumber) {
-            this.accNumber = accNumber;
-        }
 
-        //get balance
         public double getBalance() {
             return balance;
         }
@@ -60,39 +37,23 @@ public abstract class Account  implements StandingOrder{
 
         public void setLoanBalance(double loanBalance) {this.loanBalance = loanBalance;}
 
-        //set balance
+
         public void setBalance(double balance) {
             this.balance = balance;
         }
-
-        //account type
 
         public AccountTypes getType() {
             return type;
         }
 
-        public void setType(AccountTypes type) {
-            this.type = type;
-        }
 
-        //get boolean incurCharges
         public boolean isIncurCharges() {
             return incurCharges;
         }
 
-        //set boolean incurCharges
+
         public void setIncurCharges(boolean incurCharges) {
             this.incurCharges = incurCharges;
-        }
-
-        //get account holder
-        public AccountHolder getAccountHolder() {
-            return accountHolder;
-        }
-
-        //set account holder
-        public void setAccountHolder(AccountHolder accountHolder) {
-            this.accountHolder = accountHolder;
         }
 
         public void withdraw (double amount) {
@@ -131,31 +92,13 @@ public abstract class Account  implements StandingOrder{
 
     @Override
     public String toString() {
+        String accSortCode = "xx-xx-xx";
         return "Account{" +
                 "accSortCode='" + accSortCode + '\'' +
                 ", accNumber=" + accNumber +
                 ", balance=" + balance +
                 ", type=" + type +
                 ", incurCharges=" + incurCharges +
-                ", accountHolder=" + accountHolder +
                 '}';
     }
-
-    //generate public constructor
-
-
-
-        //declare abstract methods common to all types of accounts,
-        // to ensure they are implemented in each account class
-
-
-    // Commented out methods below because it's forcing
-    // child class to create these methods since they are blank in this class - Conor
-
-//        public abstract void createAccount(); // to be personalised upon type of account
-//        public abstract void checkBalance();
-//        public abstract void withdraw();
-//        public abstract void deposit();
-
-
 }

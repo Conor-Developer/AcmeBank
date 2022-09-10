@@ -14,8 +14,7 @@ public class ISAAccount extends Account{
 
     @Override
     public LocalDate getStandingOrderCreationDate() {
-        LocalDate date  = null;
-        return date;
+        return null;
     }
 
     @Override
@@ -25,15 +24,11 @@ public class ISAAccount extends Account{
 
     @Override
     public LocalDate getStandingOrderEndDate() {
-        LocalDate date  = null;
-        return date;
+        return null;
     }
 
     @Override
     public void setStandingOrderEndDate(LocalDate standingOrderEndDate) {
         System.out.println("You can not create a Standing Order with this account");
     }
-
-
-
 }

@@ -1,48 +1,51 @@
-import javax.swing.text.StyledEditorKit;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
 import java.util.Scanner;
 
+/* This is where the Menu class */
 public class Menu {
     Scanner input = new Scanner(System.in);
     Bank bank;
 
-    Boolean running = true;
+    boolean running = true;
+
 
 
     public Menu(Bank bank) {
         this.bank = bank;
     }
 
+    /* This is where the program starts from */
     public static void main(String[] args) {
         Bank acmeBank = new Bank();
         Menu menu = new Menu(acmeBank);
 //         Two test accounts created for testing.
-        AccountHolder newAccountHolderExample = new AccountHolder("Conor", "Hope", "01/12/64", "London", "E10", 07435435, "gmail", true, true);
+        AccountHolder newAccountHolderExample = new AccountHolder("Conor", "Hope", "01/12/64", "London", "E10","07404127758", "gmail", true, true);
         newAccountHolderExample.addAccount(AccountTypes.Personal);
 
-        AccountHolder newAccountHolderExample2 = new AccountHolder("Asif", "Alam", "29/10/99", "London", "E12", 074234455, "gmail", true, true);
+        AccountHolder newAccountHolderExample2 = new AccountHolder("Asif", "Alam", "29/10/99", "London", "E12", "074234455", "gmail", true, true);
         newAccountHolderExample2.addAccount(AccountTypes.Personal);
 
         menu.bank.addCustomerAccount(newAccountHolderExample.getId(), newAccountHolderExample);
         menu.bank.addCustomerAccount(newAccountHolderExample2.getId(), newAccountHolderExample2);
 
         welcomeScreen();
-        while (menu.running) {
+        boolean login = login();
+        while (menu.running && login) {
             displayOptions();
             menu.chooseOption();
         }
+
     }
 
+    /* The Welcome Screen */
     public static void welcomeScreen() {
         System.out.println("******* ACME BANK *******");
         System.out.println("Authorised Personnel Only!");
         System.out.println();
-
-        Scanner input = new Scanner(System.in);
     }
 
+    /* Shows the options that are display options. */
     public static void displayOptions() {
         System.out.println("1. Register New Customer");
         System.out.println("2. View Customer Profile");
@@ -56,59 +59,42 @@ public class Menu {
         System.out.print("Select one of the options: ");
     }
 
+    /* register New Customer */
     public void registerNewCustomer() {
         //Output "create account" script and instructions to the teller
         System.out.println("Please insert the following details:");
         System.out.print("First Name: ");
-        String firstName = input.nextLine(); //add user input as account holder name
+        String firstName = input.nextLine();
         System.out.print("Surname: ");
-        String lastName = input.nextLine(); //add user input as account holder surname
+        String lastName = input.nextLine();
         System.out.print("Date of birth: ");
-        String dob = input.nextLine(); //add user input as account holder DOB
+        String dob = input.nextLine();
         System.out.print("Address: ");
-        String address = input.nextLine(); //add user input as account holder address
+        String address = input.nextLine();
         System.out.print("Post code: ");
-        String postcode = input.nextLine(); //add user input as account holder post code
+        String postcode = input.nextLine();
         System.out.print("Contact number: ");
-        int contactNumber = input.nextInt(); //add user input as account holder phone number
+        String contactNumber = input.nextLine();
         System.out.print("Email: ");
-        String email = input.nextLine(); //add user input as account holder email
+        String email = input.nextLine();
+
         //verify the customer has provided photo ID
         System.out.println("Identification provided? Y / N");
-        //take as user input only the first character (index 0)
         char photoIdentificationProvided = input.next().charAt(0);
 
         //if yes, set boolean photoId to being true§ (false by default)
         boolean photoId;
-        if (photoIdentificationProvided == 'Y') {
-            photoId = true;
-        }
         //if not, the user will not be able to register a new customer
-        else {
-            photoId = false;
-            // System.out.println("Sorry, all account holders require a valid photo ID");
-            //return to main menu
-            // Main.menu();
-        }
+        photoId = photoIdentificationProvided == 'Y';
         //next, verify the customer has provided a proof of address
         System.out.println("Proof of Address provided? Y / N");
         char addressIdentificationProvided = input.next().charAt(0);
         boolean proofOfAddress;
         // if yes, set the boolean as true
-        if (addressIdentificationProvided == 'Y') {
-            proofOfAddress = true;
-        }
         //else, stop the registration process and return to main menu
-        else {
-            proofOfAddress = false;
-            //  System.out.println("Sorry, all account holders require to be UK residents.");
-            // return to main menu
-            // Main.menu();
-        }
+        proofOfAddress = addressIdentificationProvided == 'Y';
 
 
-        // =============== NEW ACCOUNT HOLDER CREATED =================================
-        // call the createAccountHolder method from the AccountHolder class, and assign it to the accountHolder object created
         AccountHolder newAccountHolder = new AccountHolder(firstName, lastName, dob, address, postcode, contactNumber, email, photoId, proofOfAddress );
         // create map entry using the ID and the account holder object
         this.bank.addCustomerAccount(newAccountHolder.getId(), newAccountHolder);
@@ -117,22 +103,67 @@ public class Menu {
 
     }
 
-    protected void login () {
-        String username="Admin";
-        String password = "Password1234";
-    }
+            public static boolean login() {
+            System.out.println("******* ACME BANK *******");
+            System.out.println("Authorised Personnel Only!");
+
+            String username="Admin";
+            String password = "Password1234";
+            Scanner input = new Scanner(System.in);
+
+            //  ========================================== CREATE AUTH METHOD ======
+            boolean authenticated = login(username,password, 3, input);
+
+            if (authenticated) {
+                //display welcome message to user
+                System.out.println("*************************************************************");
+                System.out.println("\tWelcome to Acme Bank. You are now logged in as Admin.");
+                System.out.println("*************************************************************");
+                System.out.println();
+
+            } else {
+                System.out.println("You are not authorised to access the system!");
+            }
+            return authenticated;
+        }
+
+
+
+
+      //login method, using Strings username and password , an integer for number of attempts, and the Scanner input to capture user input
+        public static boolean login(String username, String password, int numberOfAttempts, Scanner input) {
+            //catch user input
+            int attempt = 0;
+
+            boolean authenticated = false;
+
+            while (attempt < numberOfAttempts) {
+                System.out.print("Enter your username: ");
+                String otherUserName = input.nextLine();
+                if (otherUserName.isEmpty()) {
+                    System.out.print("Please enter a correct username.");
+                } else {
+                    System.out.print("Enter your password: ");
+                    String otherPassword = input.nextLine();
+                    if (username.equals(otherUserName) && password.equals(otherPassword)) {
+                        authenticated =  true;
+                        break;
+                    } else {
+                        System.out.println("Access not authorised. Try again");
+                        attempt++;
+                    }
+                }
+            }
+
+            return authenticated;
+        }
 
     protected void chooseOption() {
-        //  catch user input
 
         String u = input.nextLine();
 
-        AccountHolder updateAccountHolder = null;
-        Account updateAccount = null;
-        int foundAccount = 0;
-        int foundCustomer = 0;
+        int foundCustomer;
 
-        //if the user does not enter data, loop through and prompt him to choose a valid option
         while (u.isEmpty()) {
             System.out.println("No input detected. Please choose one option. ");
             u = input.nextLine();
@@ -227,7 +258,6 @@ public class Menu {
                                 System.out.println("You deposited " + amountToDeposit + ". The new balance is " + this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance());
                                 break;
 
-//                            Standing Orders
                                 case "5":
                                 System.out.println("Enter the account number of the payee: ");
                                 payeeId = input.nextInt();
@@ -241,17 +271,11 @@ public class Menu {
                                 System.out.println("3. Monthly");
                                 String choosePaymentOptions = input.nextLine();
                                 String frequency;
-                                switch (choosePaymentOptions) {
-                                    case "1":
-                                        frequency = "daily";
-                                        break;
-                                    case "2":
-                                        frequency = "weekly";
-                                        break;
-                                    case "3":
-                                        frequency = "monthly";
-                                        break;
-                                }
+                                    switch (choosePaymentOptions) {
+                                        case "1" -> frequency = "daily";
+                                        case "2" -> frequency = "weekly";
+                                        case "3" -> frequency = "monthly";
+                                    }
 
                                 System.out.println("When do you want the payments to start?: ");
                                 String startDateInput = input.nextLine();
@@ -309,7 +333,6 @@ public class Menu {
 
                 break;
             case "6":
-                // call method for creating a new account upon user choice
                 System.out.print("Enter Customer ID: ");
                 customerId = input.nextInt();
                 System.out.println();
@@ -325,15 +348,9 @@ public class Menu {
                             option = input.nextLine();
                         }
                 switch (option) {
-                    case "1":
-                        this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.Personal);
-                        break;
-                    case "2":
-                        this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.ISA);
-                        break;
-                    case "3":
-                        this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.Business);
-                        break;
+                    case "1" -> this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.Personal);
+                    case "2" -> this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.ISA);
+                    case "3" -> this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.Business);
                 }
 
                 break;
