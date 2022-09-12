@@ -30,11 +30,13 @@ public class Menu {
         menu.bank.addCustomerAccount(newAccountHolderExample2.getId(), newAccountHolderExample2);
 
         welcomeScreen();
-        boolean login = login();
-        while (menu.running && login) {
-            displayOptions();
-            menu.chooseOption();
-        }
+//        boolean login = login();
+//        while (menu.running && login) {
+//            displayOptions();
+//            menu.chooseOption();
+//        }
+        displayOptions();
+        menu.chooseOption();
 
     }
 
@@ -59,40 +61,83 @@ public class Menu {
         System.out.print("Select one of the options: ");
     }
 
+
+    public String stringValidation (String message) {
+        boolean isString = false;
+        String stringInput=null;
+        while (!isString) {
+            System.out.print(message);
+            stringInput = input.nextLine();
+            try {
+                Integer.parseInt(stringInput);
+                System.out.println("You entered a Number. Please try again.");
+            } catch (NumberFormatException e) {
+                isString = true;
+            }
+        }
+        return stringInput;
+    }
+
+    public String intValidation (String message) {
+        boolean isInt = false;
+        String stringInput=null;
+        while (!isInt) {
+            System.out.print(message);
+            stringInput = input.nextLine();
+            try {
+                Integer.parseInt(stringInput);
+                isInt = true;
+            } catch (NumberFormatException e) {
+                isInt = false;
+                System.out.println("You did not enter a Number. Please try again.");
+            }
+        }
+        return stringInput;
+    }
+
+
+
+
+
     /* register New Customer */
     public void registerNewCustomer() {
         //Output "create account" script and instructions to the teller
         System.out.println("Please insert the following details:");
-        System.out.print("First Name: ");
-        String firstName = input.nextLine();
-        System.out.print("Surname: ");
-        String lastName = input.nextLine();
-        System.out.print("Date of birth: ");
-        String dob = input.nextLine();
-        System.out.print("Address: ");
-        String address = input.nextLine();
-        System.out.print("Post code: ");
-        String postcode = input.nextLine();
-        System.out.print("Contact number: ");
-        String contactNumber = input.nextLine();
-        System.out.print("Email: ");
-        String email = input.nextLine();
+        String firstName = stringValidation("First Name: ");
+        String lastName = stringValidation("Surname: ");
+        String dob = stringValidation("Date of birth: ");
+        String address = stringValidation("Address: ");
+        String postcode = stringValidation("Post code: ");
+        String contactNumber = intValidation("Contact number: ");
+        String email = stringValidation("Email: ");
 
         //verify the customer has provided photo ID
-        System.out.println("Identification provided? Y / N");
-        char photoIdentificationProvided = input.next().charAt(0);
+//        System.out.println("Identification provided? Y / N");
+        boolean photoId=false;
+        char photoIdentificationProvided = stringValidation("Identification provided? Y / N: ").toLowerCase().charAt(0);
+        if (photoIdentificationProvided == 'n') {
+            System.out.println("You need Photo ID for an account.");
+            displayOptions();
+            chooseOption();
+        } else {
+            photoId = true;
+        }
 
-        //if yes, set boolean photoId to being true§ (false by default)
-        boolean photoId;
-        //if not, the user will not be able to register a new customer
-        photoId = photoIdentificationProvided == 'Y';
+
         //next, verify the customer has provided a proof of address
-        System.out.println("Proof of Address provided? Y / N");
-        char addressIdentificationProvided = input.next().charAt(0);
-        boolean proofOfAddress;
+//        System.out.println("Proof of Address provided? Y / N");
+        char addressIdentificationProvided = stringValidation("Proof of Address provided? Y / N: ").toLowerCase().charAt(0);
+        boolean proofOfAddress=false;
+        if (addressIdentificationProvided == 'n') {
+            System.out.println("You need Proof of Address for an account.");
+            displayOptions();
+            chooseOption();
+        } else {
+            proofOfAddress = true;
+        }
         // if yes, set the boolean as true
         //else, stop the registration process and return to main menu
-        proofOfAddress = addressIdentificationProvided == 'Y';
+
 
 
         AccountHolder newAccountHolder = new AccountHolder(firstName, lastName, dob, address, postcode, contactNumber, email, photoId, proofOfAddress );
