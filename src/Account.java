@@ -19,6 +19,8 @@ public abstract class Account  implements StandingOrder{
 
         private final ArrayList<String> transactions;
 
+        private final ArrayList<String> standingOrders;
+
 
     public Account(double balance, AccountTypes type, boolean incurCharges) {
         this.accNumber = nextAccNumber;
@@ -27,6 +29,7 @@ public abstract class Account  implements StandingOrder{
         this.type = type;
         this.incurCharges = incurCharges;
         transactions = new ArrayList<>();
+        standingOrders = new ArrayList<>();
         addTransaction(String.format("Current Balance: - " + NumberFormat.getCurrencyInstance().format(getBalance())));
     }
 
@@ -98,9 +101,17 @@ public abstract class Account  implements StandingOrder{
             transactions.add(message);
         }
 
-    public ArrayList<String> getTransactions() {
-        return transactions;
-    }
+        public ArrayList<String> getTransactions() {
+            return transactions;
+        }
+
+        public ArrayList<String> getStandingOrders() {
+            return standingOrders;
+        }
+
+        public void addStandingOrders (String message) {
+            standingOrders.add(message);
+        }
 
     @Override
     public String toString() {

@@ -44,7 +44,6 @@ public class AccountHolder {
         if (type == AccountTypes.Personal) {
             newAccount = new PersonalAccount(1, type , false);
             account.put(newAccount.getAccNumber(), newAccount);
-            System.out.println(newAccount);
         } else if (type == AccountTypes.ISA) {
             newAccount = new ISAAccount(1, type, false);
             account.put(newAccount.getAccNumber(), newAccount);
@@ -52,7 +51,6 @@ public class AccountHolder {
             newAccount = new BusinessAccount(7, type , false);
             account.put(newAccount.getAccNumber(), newAccount);
         }
-        System.out.println(newAccount.getType() + " account created successfully. ID is " + newAccount.getAccNumber());
     }
 
 

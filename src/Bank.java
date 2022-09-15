@@ -27,17 +27,17 @@ public class Bank {
     }
 
     protected int findBankAccount(int accountNumber) {
-        int correctBankAcountNumber = 0;
+        int correctBankAccountNumber = 0;
 
         for(Map.Entry<Integer, AccountHolder> customerAccount: customerAccounts.entrySet()) {
             for(Map.Entry<Integer, Account> bankAccount: customerAccount.getValue().getAccount().entrySet()) {
                 int bankAccountId = bankAccount.getValue().getAccNumber();
                 if(bankAccountId == accountNumber) {
-                    correctBankAcountNumber = bankAccountId;
+                    correctBankAccountNumber = bankAccountId;
                 }
             }
         }
-        return correctBankAcountNumber;
+        return correctBankAccountNumber;
     }
 
     protected int findAccountHolderId(int bankAccountNumber) {
