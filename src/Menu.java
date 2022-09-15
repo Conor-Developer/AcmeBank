@@ -7,10 +7,7 @@ import java.util.Scanner;
 public class Menu {
     Scanner input = new Scanner(System.in);
     Bank bank;
-
     boolean running = true;
-
-
 
     public Menu(Bank bank) {
         this.bank = bank;
@@ -20,7 +17,7 @@ public class Menu {
     public static void main(String[] args) {
         Bank acmeBank = new Bank();
         Menu menu = new Menu(acmeBank);
-//         Two test accounts created for testing.
+        // Three test accounts created for testing.
         AccountHolder newAccountHolderExample = new AccountHolder("Conor", "Hope", "01/12/64", "London", "E10","07404127758", "gmail", true, true);
         newAccountHolderExample.addAccount(AccountTypes.Personal);
 
@@ -34,15 +31,11 @@ public class Menu {
         menu.bank.addCustomerAccount(newAccountHolderExample2.getId(), newAccountHolderExample2);
         menu.bank.addCustomerAccount(newAccountHolderExample3.getId(), newAccountHolderExample3);
 
-//        welcomeScreen();
         boolean login = login();
         while (menu.running && login) {
             displayOptions();
             menu.chooseOption();
         }
-        displayOptions();
-        menu.chooseOption();
-
     }
 
     /* The Welcome Screen */
@@ -69,7 +62,7 @@ public class Menu {
 
     public String stringValidation (String message) {
         boolean isString = false;
-        String stringInput=null;
+        String stringInput= null;
         while (!isString) {
             System.out.print(message);
             stringInput = input.nextLine();
@@ -199,10 +192,7 @@ public class Menu {
         System.out.println("2. ISA account");
         System.out.println("3. Business account");
         String option = input.nextLine();
-        while (option.isEmpty()) {
-            System.out.println("No input detected. Please choose one option. ");
-            option = input.nextLine();
-        }
+
         switch (option) {
             case "1" -> this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.Personal);
             case "2" -> this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.ISA);
@@ -216,10 +206,9 @@ public class Menu {
         String accountIdInput = intValidation("Enter Account Number: ");
         int accountId = Integer.parseInt(accountIdInput);
         System.out.println();
-
         int foundCustomer = bank.findCustomer(customerId);
         this.bank.getCustomerAccounts().get(foundCustomer).removeCustomerAccount(accountId);
-        System.out.println("The account has been deleted");
+        System.out.println("The bank account has been deleted");
     }
 
     public void checkBalance (int foundCustomer, int accountId) {
@@ -241,16 +230,14 @@ public class Menu {
     }
 
     public void transfer (int foundCustomer, int accountId) {
-        String payeeAccountNumberInput = intValidation("Enter the account number of the payee: ");
-        int payeeId = Integer.parseInt(payeeAccountNumberInput);
-        int foundPayeeBankAccount = bank.findBankAccount(payeeId);
+        int foundPayeeBankAccount = bankAccountValidation("Enter the bank account number of the payee: ");
         int foundPayeeCustomerAccount = bank.findAccountHolderId(foundPayeeBankAccount);
 
-        System.out.print("How much do you want to transfer?: ");
-        double amountToTransfer = input.nextDouble();
+        String amountToTransferInput = doubleValidation("How much do you want to transfer?: ");
+        double amountToTransfer = Double.parseDouble(amountToTransferInput);
 
         this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).withdraw(amountToTransfer);
-        this.bank.getCustomerAccounts().get(foundPayeeCustomerAccount).getAccount().get(foundPayeeBankAccount).deposit( amountToTransfer);
+        this.bank.getCustomerAccounts().get(foundPayeeCustomerAccount).getAccount().get(foundPayeeBankAccount).deposit(amountToTransfer);
         String payeeFirstName = this.bank.getCustomerAccounts().get(foundPayeeCustomerAccount).getName();
         String payeeLastName = this.bank.getCustomerAccounts().get(foundPayeeCustomerAccount).getSurname();
         System.out.println("You have transferred £" + amountToTransfer + " to " + payeeFirstName + " " + payeeLastName);
@@ -351,12 +338,10 @@ public class Menu {
         System.out.println("=================");
     }
 
-
-
-    public void viewBankAccount () {
+    public int customerValidation(String message) {
         int foundCustomer = 1;
         do {
-            String customerIdInput = intValidation("Enter Customer ID: ");
+            String customerIdInput = intValidation(message);
             int customerId = Integer.parseInt(customerIdInput);
             foundCustomer = bank.findCustomer(customerId);
             if (foundCustomer == 0 ) {
@@ -364,15 +349,28 @@ public class Menu {
             }
         } while (foundCustomer == 0);
 
+        return foundCustomer;
+    }
+
+    public int bankAccountValidation(String message) {
         int accountId = 1;
         do {
-            String accountIdInput = intValidation("Enter Account Number: ");
+            String accountIdInput = intValidation(message);
             int accountIdParse = Integer.parseInt(accountIdInput);
             accountId = this.bank.findBankAccount(accountIdParse);
             if (accountId == 0 ) {
                 System.out.println("This Bank account does not exist. Please try again.");
             }
         } while (accountId == 0);
+
+        return accountId;
+    }
+
+
+
+    public void viewBankAccount () {
+        int foundCustomer = customerValidation("Enter your customer ID: ");
+        int accountId = bankAccountValidation("Enter your bank account ID: ");
 
         System.out.println();
 
@@ -392,10 +390,6 @@ public class Menu {
                 System.out.println("9. View Transactions");
 
                 String userInput = input.nextLine();
-                while (userInput.isEmpty()) {
-                    System.out.println("No input detected. Please choose one option. ");
-                    userInput = input.nextLine();
-                }
 
                 switch (userInput) {
                     case "1" -> checkBalance(foundCustomer, accountId);
@@ -407,6 +401,7 @@ public class Menu {
                     case "7" -> createLoan(foundCustomer, accountId);
                     case "8" -> payLoan(foundCustomer, accountId);
                     case "9" -> displayTransactions(foundCustomer, accountId);
+                    default -> System.out.println("Please select a valid option.");
                 }
                 break;
             case ISA :
@@ -415,10 +410,6 @@ public class Menu {
                 System.out.println("3. View Transactions");
 
                 userInput = input.nextLine();
-                while (userInput.isEmpty()) {
-                    System.out.println("No input detected. Please choose one option. ");
-                    userInput = input.nextLine();
-                }
 
                 switch (userInput) {
                     case "1" -> checkBalance(foundCustomer, accountId);
@@ -437,10 +428,6 @@ public class Menu {
                 System.out.println("8. View Transactions");
 
                 userInput = input.nextLine();
-                while (userInput.isEmpty()) {
-                    System.out.println("No input detected. Please choose one option. ");
-                    userInput = input.nextLine();
-                }
 
                 switch (userInput) {
                     case "1" -> checkBalance(foundCustomer, accountId);
@@ -451,15 +438,15 @@ public class Menu {
                     case "6" -> createLoan(foundCustomer, accountId);
                     case "7" -> payLoan(foundCustomer, accountId);
                     case "8" -> displayTransactions(foundCustomer, accountId);
+                    default -> System.out.println("Please select a valid option.");
                 }
                 break;
         }
     }
 
 
-            public static boolean login() {
-            System.out.println("******* ACME BANK *******");
-            System.out.println("Authorised Personnel Only!");
+        public static boolean login() {
+            welcomeScreen();
 
             String username="Admin";
             String password = "Password1234";
@@ -512,10 +499,7 @@ public class Menu {
     protected void chooseOption() {
 
         String u = input.nextLine();
-        while (u.isEmpty()) {
-            System.out.println("No input detected. Please choose one option. ");
-            u = input.nextLine();
-        }
+
         switch (u) {
             case "1" -> registerNewCustomer();
             case "2" -> viewAccountHolder();
@@ -527,6 +511,5 @@ public class Menu {
             case "8" -> running = false;
             default -> System.out.println("Please select a valid option.");
         }
-
     }
 }

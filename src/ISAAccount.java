@@ -8,10 +8,6 @@ public class ISAAccount extends Account{
         this.tempBalance = this.getBalance();
     }
 
-    protected void transfer(double balance) {
-        this.setBalance((this.getBalance() - balance));
-    }
-
     @Override
     public LocalDate getStandingOrderCreationDate() {
         return null;
