@@ -5,10 +5,4 @@ public class BusinessAccount extends Account{
         super(balance, accountType, incurCharges);
         this.tempBalance = this.getBalance();
     }
-
-    protected void transfer(double balance) {
-        this.setBalance((this.getBalance() - balance));
-    }
-
-
 }

@@ -2,7 +2,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Bank {
-    private Map<Integer, AccountHolder> customerAccounts = new HashMap<Integer, AccountHolder>();
+    private final Map<Integer, AccountHolder> customerAccounts = new HashMap<>();
 
     public void addCustomerAccount(int id, AccountHolder customerAccount) {
         customerAccounts.put(id, customerAccount);
@@ -46,8 +46,9 @@ public class Bank {
         for(Map.Entry<Integer, AccountHolder> customerAccount: customerAccounts.entrySet()) {
             for(Map.Entry<Integer, Account> bankAccount: customerAccount.getValue().getAccount().entrySet()) {
                 int customerAccountId = bankAccount.getValue().getAccNumber();
-                if(customerAccountId == bankAccountNumber) {
+                if (customerAccountId == bankAccountNumber) {
                     correctAccountNumber = customerAccount.getValue().getId();
+                    break;
                 }
             }
         }
