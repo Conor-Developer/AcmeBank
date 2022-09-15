@@ -1,3 +1,4 @@
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -126,7 +127,6 @@ public class Menu {
         String email = stringValidation("Email: ");
 
         //verify the customer has provided photo ID
-//        System.out.println("Identification provided? Y / N");
         boolean photoId=false;
         char photoIdentificationProvided = stringValidation("Identification provided? Y / N: ").toLowerCase().charAt(0);
         if (photoIdentificationProvided == 'n') {
@@ -141,7 +141,6 @@ public class Menu {
 
 
         //next, verify the customer has provided a proof of address
-//        System.out.println("Proof of Address provided? Y / N");
         char addressIdentificationProvided = stringValidation("Proof of Address provided? Y / N: ").toLowerCase().charAt(0);
         boolean proofOfAddress=false;
         if (addressIdentificationProvided == 'n') {
@@ -153,10 +152,6 @@ public class Menu {
         } else {
             proofOfAddress = true;
         }
-        // if yes, set the boolean as true
-        //else, stop the registration process and return to main menu
-
-
 
         AccountHolder newAccountHolder = new AccountHolder(firstName, lastName, dob, address, postcode, contactNumber, email, photoId, proofOfAddress );
         // create map entry using the ID and the account holder object
@@ -221,9 +216,7 @@ public class Menu {
         System.out.println();
 
         int foundCustomer = bank.findCustomer(customerId);
-
         this.bank.getCustomerAccounts().get(foundCustomer).removeCustomerAccount(accountId);
-
         System.out.println("The account has been deleted");
     }
 
@@ -235,6 +228,14 @@ public class Menu {
         String withdrawalAmountInput = doubleValidation("Enter the amount you want to withdraw :");
         double amountToWithdraw = Double.parseDouble(withdrawalAmountInput);
         this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).withdraw(amountToWithdraw);
+        System.out.println(String.format("Withdrawal : " + NumberFormat.getCurrencyInstance().format(amountToWithdraw) + " The new balance is - " + NumberFormat.getCurrencyInstance().format(this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance())));
+    }
+
+    public void depositBalance(int foundCustomer, int accountId) {
+        String doubleInput =  doubleValidation("How much would you like to Deposit: ");
+        double amountToDeposit = Double.parseDouble(doubleInput);
+        this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).deposit(amountToDeposit);
+        System.out.println(String.format("Deposit : " + NumberFormat.getCurrencyInstance().format(amountToDeposit) + " The new balance is - " + NumberFormat.getCurrencyInstance().format(this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance())));
     }
 
     public void transfer (int foundCustomer, int accountId) {
@@ -294,16 +295,13 @@ public class Menu {
                         transfer(foundCustomer, accountId);
                         break;
                     case "4":
-                        System.out.println("How much would you like to Deposit: ");
-                        double amountToDeposit = input.nextDouble();
-
-                        this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).deposit(amountToDeposit);
-                        System.out.println("You deposited " + amountToDeposit + ". The new balance is " + this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance());
+                        depositBalance(foundCustomer, accountId);
                         break;
 
                     case "5":
                         System.out.println("Enter the account number of the payee: ");
                         int payeeId = input.nextInt();
+
                         int foundPayeeBankAccount = bank.findBankAccount(payeeId);
                         int foundPayeeCustomerAccount = bank.findAccountHolderId(foundPayeeBankAccount);
                         System.out.println("Enter Amount: ");
