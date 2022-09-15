@@ -17,7 +17,7 @@ public abstract class Account  implements StandingOrder{
 
         private LocalDate standingOrderEndDate;
 
-        private ArrayList<String> transactions;
+        private final ArrayList<String> transactions;
 
 
     public Account(double balance, AccountTypes type, boolean incurCharges) {
@@ -27,7 +27,7 @@ public abstract class Account  implements StandingOrder{
         this.type = type;
         this.incurCharges = incurCharges;
         transactions = new ArrayList<>();
-        addTransaction(String.format("Initial balance - " + NumberFormat.getCurrencyInstance().format(balance)));
+        addTransaction(String.format("Current Balance: - " + NumberFormat.getCurrencyInstance().format(getBalance())));
     }
 
         public int getAccNumber() {
@@ -66,21 +66,17 @@ public abstract class Account  implements StandingOrder{
 
         public void withdraw (double amount) {
             this.balance -= amount;
-            System.out.println(String.format("Withdrawal : " + NumberFormat.getCurrencyInstance().format(amount) + " The new balance is - " + NumberFormat.getCurrencyInstance().format(getBalance())));
             addTransaction(String.format("Withdrawal : " + NumberFormat.getCurrencyInstance().format(amount)));
         }
 
         public void deposit (double amount) {
             this.balance += amount;
-            addTransaction(String.format("Withdrawal : " + NumberFormat.getCurrencyInstance().format(amount)));
+            addTransaction(String.format("Deposit : " + NumberFormat.getCurrencyInstance().format(amount)));
         }
 
         public void loan (double amount) {
             System.out.println("This doesnt allow a loan");
         }
-
-
-        protected void transfer(double balance) {}
 
         public LocalDate getStandingOrderCreationDate() {
             return standingOrderCreationDate;
