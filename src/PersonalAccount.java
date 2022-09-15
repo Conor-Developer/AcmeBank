@@ -1,3 +1,4 @@
+import java.text.NumberFormat;
 
 public class PersonalAccount extends Account{
 
@@ -10,12 +11,14 @@ public class PersonalAccount extends Account{
     @Override
     public void loan (double amount) {
         this.setBalance(this.getBalance() + amount);
-    this.setLoanBalance(amount);
+        this.setLoanBalance(amount);
+        addTransaction(String.format("You have taken a loan of - " + NumberFormat.getCurrencyInstance().format(amount)));
     }
 
     @Override
     protected void transfer(double balance) {
         this.setBalance((this.getBalance() - balance));
+        addTransaction(String.format("You have transferred - " + NumberFormat.getCurrencyInstance().format(balance)));
     }
 
 }
