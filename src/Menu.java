@@ -255,6 +255,49 @@ public class Menu {
         System.out.println("You have transferred £" + amountToTransfer + " to " + payeeFirstName + " " + payeeLastName);
     }
 
+    public void chooseFrequencyOfPayments() {
+        String choosePaymentFrequency = intValidation("Frequency of payments: \n 1. Daily \n 2. Weekly \n 3. Monthly");
+
+        String frequency;
+        switch (choosePaymentFrequency) {
+            case "1" -> frequency = "daily";
+            case "2" -> frequency = "weekly";
+            case "3" -> frequency = "monthly";
+        }
+    }
+
+    public void paymentStartDate(int foundCustomer, int accountId) {
+        String startDateInput = stringValidation("When do you want the payments to start?: ");
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate standingOrderCreationDate = LocalDate.parse(startDateInput, dateFormat);
+        System.out.println("Your payments will start from " + String.format(startDateInput));
+        this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setStandingOrderCreationDate(standingOrderCreationDate);
+    }
+
+    public void paymentEndDate(int foundCustomer, int accountId) {
+        paymentEndDate(foundCustomer, accountId);
+        String endDateInput = stringValidation("When do you want the payments to end?: ");
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate standingOrderEndDate = LocalDate.parse(endDateInput, dateFormat);
+        System.out.println("Your payments will end on " + String.format(endDateInput));
+        this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setStandingOrderEndDate(standingOrderEndDate);
+    }
+
+    public void standingOrder(int foundCustomer, int accountId) {
+        String payeeAccountNumberInput = intValidation("Enter the account number of the payee: ");
+        int payeeId = Integer.parseInt(payeeAccountNumberInput);
+
+        int foundPayeeBankAccount = bank.findBankAccount(payeeId);
+        int foundPayeeCustomerAccount = bank.findAccountHolderId(foundPayeeBankAccount);
+
+        String doubleInput =  doubleValidation("Enter Amount: ");
+        double standingOrderAmount = Double.parseDouble(doubleInput);
+
+        chooseFrequencyOfPayments();
+        paymentStartDate(foundCustomer, accountId);
+        paymentEndDate(foundCustomer, accountId);
+    }
+
     public void viewBankAccount () {
         String customerIdInput = intValidation("Enter Customer ID: ");
         int customerId = Integer.parseInt(customerIdInput);
@@ -299,37 +342,7 @@ public class Menu {
                         break;
 
                     case "5":
-                        System.out.println("Enter the account number of the payee: ");
-                        int payeeId = input.nextInt();
-
-                        int foundPayeeBankAccount = bank.findBankAccount(payeeId);
-                        int foundPayeeCustomerAccount = bank.findAccountHolderId(foundPayeeBankAccount);
-                        System.out.println("Enter Amount: ");
-                        double standingOrderAmount = input.nextDouble();
-                        System.out.println("Enter Frequency of payments");
-                        System.out.println("1. Daily");
-                        System.out.println("2. Weekly");
-                        System.out.println("3. Monthly");
-                        String choosePaymentOptions = input.nextLine();
-                        String frequency;
-                        switch (choosePaymentOptions) {
-                            case "1" -> frequency = "daily";
-                            case "2" -> frequency = "weekly";
-                            case "3" -> frequency = "monthly";
-                        }
-
-                        System.out.println("When do you want the payments to start?: ");
-                        String startDateInput = input.nextLine();
-                        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                        LocalDate standingOrderCreationDate = LocalDate.parse(startDateInput, dateFormat);
-                        System.out.println("Your payments will start from " + String.format(startDateInput));
-                        this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setStandingOrderCreationDate(standingOrderCreationDate);
-                        System.out.println("When do you want the payments to end?: ");
-                        String endDateInput = input.nextLine();
-                        LocalDate standingOrderEndDate = LocalDate.parse(endDateInput, dateFormat);
-                        System.out.println("Your payments will end on " + String.format(endDateInput));
-                        this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setStandingOrderEndDate(standingOrderEndDate);
-
+                        standingOrder(foundCustomer, accountId);
                         break;
 
                     case "6":
