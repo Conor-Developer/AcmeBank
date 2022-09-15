@@ -1,7 +1,6 @@
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 /* This is the Menu class */
@@ -90,7 +89,6 @@ public class Menu {
                 Integer.parseInt(stringInput);
                 isInt = true;
             } catch (NumberFormatException e) {
-                isInt = false;
                 System.out.println("You did not enter a Number. Please try again.");
             }
         }
@@ -107,7 +105,6 @@ public class Menu {
                 Double.parseDouble(stringInput);
                 isDouble = true;
             } catch (NumberFormatException e) {
-                isDouble = false;
                 System.out.println("You did not enter a Number. Please try again.");
             }
         }
@@ -228,14 +225,14 @@ public class Menu {
         String withdrawalAmountInput = doubleValidation("Enter the amount you want to withdraw :");
         double amountToWithdraw = Double.parseDouble(withdrawalAmountInput);
         this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).withdraw(amountToWithdraw);
-        System.out.println(String.format("Withdrawal : " + NumberFormat.getCurrencyInstance().format(amountToWithdraw) + " The new balance is - " + NumberFormat.getCurrencyInstance().format(this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance())));
+        System.out.println("Withdrawal : " + NumberFormat.getCurrencyInstance().format(amountToWithdraw) + " The new balance is - " + NumberFormat.getCurrencyInstance().format(this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance()));
     }
 
     public void depositBalance(int foundCustomer, int accountId) {
         String doubleInput =  doubleValidation("How much would you like to Deposit: ");
         double amountToDeposit = Double.parseDouble(doubleInput);
         this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).deposit(amountToDeposit);
-        System.out.println(String.format("Deposit : " + NumberFormat.getCurrencyInstance().format(amountToDeposit) + " The new balance is - " + NumberFormat.getCurrencyInstance().format(this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance())));
+        System.out.println("Deposit : " + NumberFormat.getCurrencyInstance().format(amountToDeposit) + " The new balance is - " + NumberFormat.getCurrencyInstance().format(this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance()));
     }
 
     public void transfer (int foundCustomer, int accountId) {
@@ -248,7 +245,6 @@ public class Menu {
         double amountToTransfer = input.nextDouble();
 
         this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).withdraw(amountToTransfer);
-        double payeeBalance = this.bank.getCustomerAccounts().get(foundPayeeCustomerAccount).getAccount().get(foundPayeeBankAccount).getBalance();
         this.bank.getCustomerAccounts().get(foundPayeeCustomerAccount).getAccount().get(foundPayeeBankAccount).deposit( amountToTransfer);
         String payeeFirstName = this.bank.getCustomerAccounts().get(foundPayeeCustomerAccount).getName();
         String payeeLastName = this.bank.getCustomerAccounts().get(foundPayeeCustomerAccount).getSurname();
@@ -275,7 +271,6 @@ public class Menu {
     }
 
     public void paymentEndDate(int foundCustomer, int accountId) {
-        paymentEndDate(foundCustomer, accountId);
         String endDateInput = stringValidation("When do you want the payments to end?: ");
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate standingOrderEndDate = LocalDate.parse(endDateInput, dateFormat);
@@ -297,6 +292,47 @@ public class Menu {
         paymentStartDate(foundCustomer, accountId);
         paymentEndDate(foundCustomer, accountId);
     }
+
+    public void createLoan(int foundCustomer, int accountId){
+        String amountToLoanInput = doubleValidation("How much loan do you require: ");
+        double amountToLoan = Double.parseDouble(amountToLoanInput);
+        this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).loan(amountToLoan);
+        System.out.println("You have received " + amountToLoan + ". The new balance is " + this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance());
+    }
+
+
+    public void payLoan(int foundCustomer, int accountId) {
+        String amountToPayLoanInput = doubleValidation("How much loan do you want to pay: ");
+        double amountToPayLoan = Double.parseDouble(amountToPayLoanInput);
+
+        double loanBalance = this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getLoanBalance();
+        double existingBalance = this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance();
+
+
+        if (existingBalance >= amountToPayLoan && amountToPayLoan <= loanBalance) {
+            this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setBalance(existingBalance-amountToPayLoan);
+            this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setLoanBalance(loanBalance-amountToPayLoan);
+        } else if (amountToPayLoan > loanBalance){
+            System.out.println("You are attempting to pay more than your loan balance. Please try again.");
+        } else  {
+            System.out.println("You do not have sufficient funds to pay towards your loan balance.");
+        }
+        loanBalance = this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getLoanBalance();
+
+        System.out.println("This is the existing balance " + existingBalance);
+        System.out.println("This is the amount to pay loan " + amountToPayLoan);
+        System.out.println("This is the loan balance " + loanBalance);
+    }
+
+    public void displayTransactions(int foundCustomer, int accountId) {
+        System.out.println("**** Transactions ****");
+        for (String transactions : this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getTransactions()) {
+            System.out.println(transactions);
+        }
+        System.out.println("=================");
+    }
+
+
 
     public void viewBankAccount () {
         String customerIdInput = intValidation("Enter Customer ID: ");
@@ -328,58 +364,14 @@ public class Menu {
                 }
 
                 switch (userInput) {
-                    case "1":
-                        checkBalance(foundCustomer, accountId);
-                        break;
-                    case "2":
-                        withdrawBalance(foundCustomer, accountId);
-                        break;
-                    case "3":
-                        transfer(foundCustomer, accountId);
-                        break;
-                    case "4":
-                        depositBalance(foundCustomer, accountId);
-                        break;
-
-                    case "5":
-                        standingOrder(foundCustomer, accountId);
-                        break;
-
-                    case "6":
-                        System.out.println("How much loan do you require: ");
-                        double amountToLoan = input.nextDouble();
-
-                        this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).loan(amountToLoan);
-                        System.out.println("You have received " + amountToLoan + ". The new balance is " + this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance());
-                        //number of payments, monthly payments, (Loan calculator?), interest
-                        break;
-                    case "7":
-                        System.out.println("How much loan do you want to pay: ");
-                        double amountToPayLoan = input.nextDouble();
-                        double loanBalance = this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getLoanBalance();
-                        double existingBalance = this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance();
-
-
-                        if (existingBalance >= amountToPayLoan && amountToPayLoan <= loanBalance) {
-                            this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setBalance(existingBalance-amountToPayLoan);
-                            this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setLoanBalance(loanBalance-amountToPayLoan);
-                        } else if (amountToPayLoan > loanBalance){
-                            System.out.println("You are attempting to pay more than your loan balance. Please try again.");
-                        } else  {
-                            System.out.println("You do not have sufficient funds to pay towards your loan balance.");
-                        }
-                        loanBalance = this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getLoanBalance();
-
-                        System.out.println("This is the existing balance " + existingBalance);
-                        System.out.println("This is the amount to pay loan " + amountToPayLoan);
-                        System.out.println("This is the loan balance " + loanBalance);
-                        break;
-                    case "8":
-                        System.out.println("**** Transactions ****");
-                        for (String transactions : this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getTransactions()) {
-                            System.out.println(transactions);
-                        }
-                        System.out.println("=================");
+                    case "1" -> checkBalance(foundCustomer, accountId);
+                    case "2" -> withdrawBalance(foundCustomer, accountId);
+                    case "3" -> transfer(foundCustomer, accountId);
+                    case "4" -> depositBalance(foundCustomer, accountId);
+                    case "5" -> standingOrder(foundCustomer, accountId);
+                    case "6" -> createLoan(foundCustomer, accountId);
+                    case "7" -> payLoan(foundCustomer, accountId);
+                    case "8" -> displayTransactions(foundCustomer, accountId);
                 }
                 break;
             case ISA :
@@ -417,9 +409,6 @@ public class Menu {
             return authenticated;
         }
 
-
-
-
       //login method, using Strings username and password , an integer for number of attempts, and the Scanner input to capture user input
         public static boolean login(String username, String password, int numberOfAttempts, Scanner input) {
             //catch user input
@@ -451,40 +440,20 @@ public class Menu {
     protected void chooseOption() {
 
         String u = input.nextLine();
-
-        int foundCustomer;
-
         while (u.isEmpty()) {
             System.out.println("No input detected. Please choose one option. ");
             u = input.nextLine();
         }
-        switch (u){
-            case "1":
-                registerNewCustomer();
-                break;
-            case "2":
-                viewAccountHolder();
-                break;
-            case "3":
-                updateAccountHolder();
-                break;
-            case "4":
-                deleteAccountHolder();
-                break;
-            case "5":
-                viewBankAccount();
-                break;
-            case "6":
-                createNewBankAccount();
-                break;
-            case "7":
-                deleteBankAccount();
-                break;
-            case "8":
-                running = false;
-                break;
-            default:
-                System.out.println("Please select a valid option.");
+        switch (u) {
+            case "1" -> registerNewCustomer();
+            case "2" -> viewAccountHolder();
+            case "3" -> updateAccountHolder();
+            case "4" -> deleteAccountHolder();
+            case "5" -> viewBankAccount();
+            case "6" -> createNewBankAccount();
+            case "7" -> deleteBankAccount();
+            case "8" -> running = false;
+            default -> System.out.println("Please select a valid option.");
         }
 
     }

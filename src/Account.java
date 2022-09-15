@@ -17,7 +17,7 @@ public abstract class Account  implements StandingOrder{
 
         private LocalDate standingOrderEndDate;
 
-        private ArrayList<String> transactions;
+        private final ArrayList<String> transactions;
 
 
     public Account(double balance, AccountTypes type, boolean incurCharges) {
@@ -77,9 +77,6 @@ public abstract class Account  implements StandingOrder{
         public void loan (double amount) {
             System.out.println("This doesnt allow a loan");
         }
-
-
-        protected void transfer(double balance) {}
 
         public LocalDate getStandingOrderCreationDate() {
             return standingOrderCreationDate;
