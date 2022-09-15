@@ -1,10 +1,12 @@
+import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public abstract class Account  implements StandingOrder{
         private static int nextAccNumber = 2000;
         private final int accNumber; //needs to be unique
 
-    private double balance;
+        private double balance;
 
         private double loanBalance;
 
@@ -15,6 +17,8 @@ public abstract class Account  implements StandingOrder{
 
         private LocalDate standingOrderEndDate;
 
+        private ArrayList<String> transactions;
+
 
     public Account(double balance, AccountTypes type, boolean incurCharges) {
         this.accNumber = nextAccNumber;
@@ -22,6 +26,8 @@ public abstract class Account  implements StandingOrder{
         this.balance = balance;
         this.type = type;
         this.incurCharges = incurCharges;
+        transactions = new ArrayList<>();
+        addTransaction(String.format("Initial balance - " + NumberFormat.getCurrencyInstance().format(balance)));
     }
 
         public int getAccNumber() {
@@ -35,7 +41,9 @@ public abstract class Account  implements StandingOrder{
 
         public double getLoanBalance() {return loanBalance;}
 
-        public void setLoanBalance(double loanBalance) {this.loanBalance = loanBalance;}
+        public void setLoanBalance(double loanBalance) {
+            this.loanBalance = loanBalance;
+        }
 
 
         public void setBalance(double balance) {
@@ -58,15 +66,17 @@ public abstract class Account  implements StandingOrder{
 
         public void withdraw (double amount) {
             this.balance -= amount;
+            System.out.println(String.format("Withdrawal : " + NumberFormat.getCurrencyInstance().format(amount) + " The new balance is - " + NumberFormat.getCurrencyInstance().format(getBalance())));
+            addTransaction(String.format("Withdrawal : " + NumberFormat.getCurrencyInstance().format(amount)));
         }
 
         public void deposit (double amount) {
             this.balance += amount;
+            addTransaction(String.format("Withdrawal : " + NumberFormat.getCurrencyInstance().format(amount)));
         }
 
         public void loan (double amount) {
             System.out.println("This doesnt allow a loan");
-
         }
 
 
@@ -88,7 +98,13 @@ public abstract class Account  implements StandingOrder{
             this.standingOrderEndDate = standingOrderEndDate;
         }
 
+        public void addTransaction(String message) {
+            transactions.add(message);
+        }
 
+    public ArrayList<String> getTransactions() {
+        return transactions;
+    }
 
     @Override
     public String toString() {

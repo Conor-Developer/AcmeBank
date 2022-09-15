@@ -1,8 +1,9 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
-/* This is where the Menu class */
+/* This is the Menu class */
 public class Menu {
     Scanner input = new Scanner(System.in);
     Bank bank;
@@ -30,11 +31,11 @@ public class Menu {
         menu.bank.addCustomerAccount(newAccountHolderExample2.getId(), newAccountHolderExample2);
 
         welcomeScreen();
-//        boolean login = login();
-//        while (menu.running && login) {
-//            displayOptions();
-//            menu.chooseOption();
-//        }
+        boolean login = login();
+        while (menu.running && login) {
+            displayOptions();
+            menu.chooseOption();
+        }
         displayOptions();
         menu.chooseOption();
 
@@ -95,9 +96,22 @@ public class Menu {
         return stringInput;
     }
 
-
-
-
+    public String doubleValidation (String message) {
+        boolean isDouble = false;
+        String stringInput=null;
+        while (!isDouble) {
+            System.out.print(message);
+            stringInput = input.nextLine();
+            try {
+                Double.parseDouble(stringInput);
+                isDouble = true;
+            } catch (NumberFormatException e) {
+                isDouble = false;
+                System.out.println("You did not enter a Number. Please try again.");
+            }
+        }
+        return stringInput;
+    }
 
     /* register New Customer */
     public void registerNewCustomer() {
@@ -117,8 +131,10 @@ public class Menu {
         char photoIdentificationProvided = stringValidation("Identification provided? Y / N: ").toLowerCase().charAt(0);
         if (photoIdentificationProvided == 'n') {
             System.out.println("You need Photo ID for an account.");
-            displayOptions();
-            chooseOption();
+            while (this.running) {
+                displayOptions();
+                chooseOption();
+            }
         } else {
             photoId = true;
         }
@@ -130,8 +146,10 @@ public class Menu {
         boolean proofOfAddress=false;
         if (addressIdentificationProvided == 'n') {
             System.out.println("You need Proof of Address for an account.");
-            displayOptions();
-            chooseOption();
+            while (this.running) {
+                displayOptions();
+                chooseOption();
+            }
         } else {
             proofOfAddress = true;
         }
@@ -147,6 +165,222 @@ public class Menu {
         System.out.println("Done. " + newAccountHolder.getName() + " " + newAccountHolder.getSurname() + " has the following ID: " + newAccountHolder.getId());
 
     }
+
+    public void viewAccountHolder () {
+        String customerIdInput = intValidation("Enter Customer ID: ");
+        int customerId = Integer.parseInt(customerIdInput);
+        System.out.println();
+        int foundCustomer = bank.findCustomer(customerId);
+        this.bank.getCustomerAccounts().get(foundCustomer).viewAccountHolder();
+    }
+
+    public void updateAccountHolder () {
+        String customerIdInput = intValidation("Enter Customer ID: ");
+        int customerId = Integer.parseInt(customerIdInput);
+        System.out.println();
+        int foundCustomer = bank.findCustomer(customerId);
+        this.bank.getCustomerAccounts().get(foundCustomer).updateAccountHolder();
+    }
+
+    public void deleteAccountHolder () {
+        String customerIdInput = intValidation("Enter Customer ID: ");
+        int customerId = Integer.parseInt(customerIdInput);
+        System.out.println();
+        int foundCustomer = bank.findCustomer(customerId);
+        this.bank.removeCustomerAccount(foundCustomer);
+        System.out.println("The account has been deleted");
+    }
+
+    public void createNewBankAccount () {
+        String customerIdInput = intValidation("Enter Customer ID: ");
+        int customerId = Integer.parseInt(customerIdInput);
+        System.out.println();
+        int foundCustomer = bank.findCustomer(customerId);
+        System.out.println(foundCustomer);
+        System.out.println("What kind of account do you want to create?");
+        System.out.println("1. Personal account");
+        System.out.println("2. ISA account");
+        System.out.println("3. Business account");
+        String option = input.nextLine();
+        while (option.isEmpty()) {
+            System.out.println("No input detected. Please choose one option. ");
+            option = input.nextLine();
+        }
+        switch (option) {
+            case "1" -> this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.Personal);
+            case "2" -> this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.ISA);
+            case "3" -> this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.Business);
+        }
+    }
+
+    public void deleteBankAccount () {
+        String customerIdInput = intValidation("Enter Customer ID: ");
+        int customerId = Integer.parseInt(customerIdInput);
+        String accountIdInput = intValidation("Enter Account Number: ");
+        int accountId = Integer.parseInt(accountIdInput);
+        System.out.println();
+
+        int foundCustomer = bank.findCustomer(customerId);
+
+        this.bank.getCustomerAccounts().get(foundCustomer).removeCustomerAccount(accountId);
+
+        System.out.println("The account has been deleted");
+    }
+
+    public void checkBalance (int foundCustomer, int accountId) {
+        System.out.println("The balance is " + this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance());
+    }
+
+    public void withdrawBalance (int foundCustomer, int accountId) {
+        String withdrawalAmountInput = doubleValidation("Enter the amount you want to withdraw :");
+        double amountToWithdraw = Double.parseDouble(withdrawalAmountInput);
+        this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).withdraw(amountToWithdraw);
+    }
+
+    public void transfer (int foundCustomer, int accountId) {
+        String payeeAccountNumberInput = intValidation("Enter the account number of the payee: ");
+        int payeeId = Integer.parseInt(payeeAccountNumberInput);
+        int foundPayeeBankAccount = bank.findBankAccount(payeeId);
+        int foundPayeeCustomerAccount = bank.findAccountHolderId(foundPayeeBankAccount);
+
+        System.out.print("How much do you want to transfer?: ");
+        double amountToTransfer = input.nextDouble();
+
+        this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).withdraw(amountToTransfer);
+        double payeeBalance = this.bank.getCustomerAccounts().get(foundPayeeCustomerAccount).getAccount().get(foundPayeeBankAccount).getBalance();
+        this.bank.getCustomerAccounts().get(foundPayeeCustomerAccount).getAccount().get(foundPayeeBankAccount).deposit( amountToTransfer);
+        String payeeFirstName = this.bank.getCustomerAccounts().get(foundPayeeCustomerAccount).getName();
+        String payeeLastName = this.bank.getCustomerAccounts().get(foundPayeeCustomerAccount).getSurname();
+        System.out.println("You have transferred £" + amountToTransfer + " to " + payeeFirstName + " " + payeeLastName);
+    }
+
+    public void viewBankAccount () {
+        String customerIdInput = intValidation("Enter Customer ID: ");
+        int customerId = Integer.parseInt(customerIdInput);
+        int foundCustomer = bank.findCustomer(customerId);
+
+        String accountIdInput = intValidation("Enter Account Number: ");
+        int accountId = Integer.parseInt(accountIdInput);
+        System.out.println();
+
+        System.out.println("Customer Account number: " + foundCustomer);
+        System.out.println("Bank Account number: " + accountId);
+
+        switch (this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getType()) {
+            case Personal :
+                System.out.println("1. Check Balance");
+                System.out.println("2. Withdraw");
+                System.out.println("3. Transfer  ");
+                System.out.println("4. Deposit");
+                System.out.println("5. Standing Order");
+                System.out.println("6. Create Loan");
+                System.out.println("7. Pay Loan");
+                System.out.println("8. View Transactions");
+
+                String userInput = input.nextLine();
+                while (userInput.isEmpty()) {
+                    System.out.println("No input detected. Please choose one option. ");
+                    userInput = input.nextLine();
+                }
+
+                switch (userInput) {
+                    case "1":
+                        checkBalance(foundCustomer, accountId);
+                        break;
+                    case "2":
+                        withdrawBalance(foundCustomer, accountId);
+                        break;
+                    case "3":
+                        transfer(foundCustomer, accountId);
+                        break;
+                    case "4":
+                        System.out.println("How much would you like to Deposit: ");
+                        double amountToDeposit = input.nextDouble();
+
+                        this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).deposit(amountToDeposit);
+                        System.out.println("You deposited " + amountToDeposit + ". The new balance is " + this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance());
+                        break;
+
+                    case "5":
+                        System.out.println("Enter the account number of the payee: ");
+                        int payeeId = input.nextInt();
+                        int foundPayeeBankAccount = bank.findBankAccount(payeeId);
+                        int foundPayeeCustomerAccount = bank.findAccountHolderId(foundPayeeBankAccount);
+                        System.out.println("Enter Amount: ");
+                        double standingOrderAmount = input.nextDouble();
+                        System.out.println("Enter Frequency of payments");
+                        System.out.println("1. Daily");
+                        System.out.println("2. Weekly");
+                        System.out.println("3. Monthly");
+                        String choosePaymentOptions = input.nextLine();
+                        String frequency;
+                        switch (choosePaymentOptions) {
+                            case "1" -> frequency = "daily";
+                            case "2" -> frequency = "weekly";
+                            case "3" -> frequency = "monthly";
+                        }
+
+                        System.out.println("When do you want the payments to start?: ");
+                        String startDateInput = input.nextLine();
+                        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        LocalDate standingOrderCreationDate = LocalDate.parse(startDateInput, dateFormat);
+                        System.out.println("Your payments will start from " + String.format(startDateInput));
+                        this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setStandingOrderCreationDate(standingOrderCreationDate);
+                        System.out.println("When do you want the payments to end?: ");
+                        String endDateInput = input.nextLine();
+                        LocalDate standingOrderEndDate = LocalDate.parse(endDateInput, dateFormat);
+                        System.out.println("Your payments will end on " + String.format(endDateInput));
+                        this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setStandingOrderEndDate(standingOrderEndDate);
+
+                        break;
+
+                    case "6":
+                        System.out.println("How much loan do you require: ");
+                        double amountToLoan = input.nextDouble();
+
+                        this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).loan(amountToLoan);
+                        System.out.println("You have received " + amountToLoan + ". The new balance is " + this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance());
+                        //number of payments, monthly payments, (Loan calculator?), interest
+                        break;
+                    case "7":
+                        System.out.println("How much loan do you want to pay: ");
+                        double amountToPayLoan = input.nextDouble();
+                        double loanBalance = this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getLoanBalance();
+                        double existingBalance = this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance();
+
+
+                        if (existingBalance >= amountToPayLoan && amountToPayLoan <= loanBalance) {
+                            this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setBalance(existingBalance-amountToPayLoan);
+                            this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setLoanBalance(loanBalance-amountToPayLoan);
+                        } else if (amountToPayLoan > loanBalance){
+                            System.out.println("You are attempting to pay more than your loan balance. Please try again.");
+                        } else  {
+                            System.out.println("You do not have sufficient funds to pay towards your loan balance.");
+                        }
+                        loanBalance = this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getLoanBalance();
+
+                        System.out.println("This is the existing balance " + existingBalance);
+                        System.out.println("This is the amount to pay loan " + amountToPayLoan);
+                        System.out.println("This is the loan balance " + loanBalance);
+                        break;
+                    case "8":
+                        System.out.println("**** Transactions ****");
+                        for (String transactions : this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getTransactions()) {
+                            System.out.println(transactions);
+                        }
+                        System.out.println("=================");
+                }
+                break;
+            case ISA :
+                System.out.println("1. ");
+                System.out.println("2. ");
+            case Business:
+                System.out.println("1. ");
+                System.out.println("2. ");
+                System.out.println("4. Direct Debit");
+        }
+    }
+
 
             public static boolean login() {
             System.out.println("******* ACME BANK *******");
@@ -218,199 +452,22 @@ public class Menu {
                 registerNewCustomer();
                 break;
             case "2":
-                System.out.print("Enter Customer ID: ");
-                int customerId = input.nextInt();
-                System.out.println();
-                foundCustomer = bank.findCustomer(customerId);
-                this.bank.getCustomerAccounts().get(foundCustomer).viewAccountHolder();
+                viewAccountHolder();
                 break;
             case "3":
-                System.out.print("Enter Customer ID: ");
-                customerId = input.nextInt();
-                System.out.println();
-                foundCustomer = bank.findCustomer(customerId);
-                this.bank.getCustomerAccounts().get(foundCustomer).updateAccountHolder();
+                updateAccountHolder();
                 break;
             case "4":
-                System.out.print("Enter Customer ID: ");
-                customerId = input.nextInt();
-                System.out.println();
-                foundCustomer = bank.findCustomer(customerId);
-                this.bank.removeCustomerAccount(foundCustomer);
-                System.out.println("The account has been deleted");
+                deleteAccountHolder();
                 break;
             case "5":
-                System.out.print("Enter Customer ID: ");
-                customerId=input.nextInt();
-                foundCustomer = bank.findCustomer(customerId);
-
-                System.out.print("Enter Account ID: ");
-                int accountId = input.nextInt();
-                System.out.println();
-
-                System.out.println("Customer Account number: " + foundCustomer);
-                System.out.println("Bank Account number: " + accountId);
-
-                switch (this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getType()) {
-                    case Personal :
-                        System.out.println("1. Check Balance");
-                        System.out.println("2. Withdraw");
-                        System.out.println("3. Transfer  ");
-                        System.out.println("4. Deposit");
-                        System.out.println("5. Standing Order");
-                        System.out.println("7. Create Loan");
-                        System.out.println("8. Pay Loan");
-
-                        String userInput = input.nextLine();
-                        while (userInput.isEmpty()) {
-                            System.out.println("No input detected. Please choose one option. ");
-                            userInput = input.nextLine();
-                        }
-
-                        switch (userInput) {
-                            case "1":
-                                System.out.println("The balance is " + this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance());
-                                break;
-                            case "2":
-                                System.out.println("Enter the amount you want to withdraw :");
-                                double amountToWithdraw = input.nextDouble();
-
-                                this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).withdraw(amountToWithdraw);
-                                System.out.println("You have withdrawn " + amountToWithdraw + ". The new balance is " + this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance());
-                                break;
-                            case "3":
-                                // Transfer Method
-                                System.out.println("Enter the account number of the payee: ");
-                                int payeeId = input.nextInt();
-                                int foundPayeeBankAccount = bank.findBankAccount(payeeId);
-                                int foundPayeeCustomerAccount = bank.findAccountHolderId(foundPayeeBankAccount);
-
-                                System.out.print("How much do you want to transfer?: ");
-                                double amountToTransfer = input.nextDouble();
-
-                                this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).transfer(amountToTransfer);
-                                double payeeBalance = this.bank.getCustomerAccounts().get(foundPayeeCustomerAccount).getAccount().get(foundPayeeBankAccount).getBalance();
-                                this.bank.getCustomerAccounts().get(foundPayeeCustomerAccount).getAccount().get(foundPayeeBankAccount).setBalance(payeeBalance + amountToTransfer);
-                                String payeeFirstName = this.bank.getCustomerAccounts().get(foundPayeeCustomerAccount).getName();
-                                String payeeLastName = this.bank.getCustomerAccounts().get(foundPayeeCustomerAccount).getSurname();
-                                System.out.println("You have transferred £" + amountToTransfer + " to " + payeeFirstName + " " + payeeLastName);
-                                break;
-                            case "4":
-                                System.out.println("How much would you like to Deposit: ");
-                                double amountToDeposit = input.nextDouble();
-
-                                this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).deposit(amountToDeposit);
-                                System.out.println("You deposited " + amountToDeposit + ". The new balance is " + this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance());
-                                break;
-
-                                case "5":
-                                System.out.println("Enter the account number of the payee: ");
-                                payeeId = input.nextInt();
-                                foundPayeeBankAccount = bank.findBankAccount(payeeId);
-                                foundPayeeCustomerAccount = bank.findAccountHolderId(foundPayeeBankAccount);
-                                System.out.println("Enter Amount: ");
-                                double standingOrderAmount = input.nextDouble();
-                                System.out.println("Enter Frequency of payments");
-                                System.out.println("1. Daily");
-                                System.out.println("2. Weekly");
-                                System.out.println("3. Monthly");
-                                String choosePaymentOptions = input.nextLine();
-                                String frequency;
-                                    switch (choosePaymentOptions) {
-                                        case "1" -> frequency = "daily";
-                                        case "2" -> frequency = "weekly";
-                                        case "3" -> frequency = "monthly";
-                                    }
-
-                                System.out.println("When do you want the payments to start?: ");
-                                String startDateInput = input.nextLine();
-                                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                                LocalDate standingOrderCreationDate = LocalDate.parse(startDateInput, dateFormat);
-                                System.out.println("Your payments will start from " + String.format(startDateInput));
-                                this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setStandingOrderCreationDate(standingOrderCreationDate);
-                                System.out.println("When do you want the payments to end?: ");
-                                String endDateInput = input.nextLine();
-                                LocalDate standingOrderEndDate = LocalDate.parse(endDateInput, dateFormat);
-                                System.out.println("Your payments will end on " + String.format(endDateInput));
-                                this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setStandingOrderEndDate(standingOrderEndDate);
-
-                                break;
-
-                            case "7":
-                                System.out.println("How much loan do you require: ");
-                                double amountToLoan = input.nextDouble();
-
-                                this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).loan(amountToLoan);
-                                System.out.println("You have received " + amountToLoan + ". The new balance is " + this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance());
-                                //number of payments, monthly payments, (Loan calculator?), interest
-                                break;
-                            case "8":
-                                System.out.println("How much loan do you want to pay: ");
-                                double amountToPayLoan = input.nextDouble();
-                                double loanBalance = this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getLoanBalance();
-                                double existingBalance = this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance();
-
-
-                                if (existingBalance >= amountToPayLoan && amountToPayLoan <= loanBalance) {
-                                    this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setBalance(existingBalance-amountToPayLoan);
-                                    this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setLoanBalance(loanBalance-amountToPayLoan);
-                                } else if (amountToPayLoan > loanBalance){
-                                    System.out.println("You are attempting to pay more than your loan balance. Please try again.");
-                                } else  {
-                                    System.out.println("You do not have sufficient funds to pay towards your loan balance.");
-                                }
-                                loanBalance = this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getLoanBalance();
-
-                                System.out.println("This is the existing balance " + existingBalance);
-                                System.out.println("This is the amount to pay loan " + amountToPayLoan);
-                                System.out.println("This is the loan balance " + loanBalance);
-                                break;
-                        }
-                        break;
-                    case ISA :
-                        System.out.println("1. ");
-                        System.out.println("2. ");
-                    case Business:
-                        System.out.println("1. ");
-                        System.out.println("2. ");
-                        System.out.println("4. Direct Debit");
-                }
-
+                viewBankAccount();
                 break;
             case "6":
-                System.out.print("Enter Customer ID: ");
-                customerId = input.nextInt();
-                System.out.println();
-                foundCustomer = bank.findCustomer(customerId);
-                System.out.println(foundCustomer);
-                System.out.println("What kind of account do you want to create?");
-                System.out.println("1. Personal account");
-                System.out.println("2. ISA account");
-                System.out.println("3. Business account");
-                String option = input.nextLine();
-                while (option.isEmpty()) {
-                            System.out.println("No input detected. Please choose one option. ");
-                            option = input.nextLine();
-                        }
-                switch (option) {
-                    case "1" -> this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.Personal);
-                    case "2" -> this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.ISA);
-                    case "3" -> this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.Business);
-                }
-
+                createNewBankAccount();
                 break;
             case "7":
-                System.out.print("Enter Customer ID: ");
-                customerId = input.nextInt();
-                System.out.print("Enter Account ID: ");
-                accountId = input.nextInt();
-                System.out.println();
-
-                foundCustomer = bank.findCustomer(customerId);
-
-                this.bank.getCustomerAccounts().get(foundCustomer).removeCustomerAccount(accountId);
-
-                System.out.println("The account has been deleted");
+                deleteBankAccount();
                 break;
             case "8":
                 running = false;
