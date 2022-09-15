@@ -15,12 +15,6 @@ public class PersonalAccount extends Account{
         addTransaction(String.format("You have taken a loan of - " + NumberFormat.getCurrencyInstance().format(amount)));
     }
 
-    @Override
-    protected void transfer(double balance) {
-        this.setBalance((this.getBalance() - balance));
-        addTransaction(String.format("You have transferred - " + NumberFormat.getCurrencyInstance().format(balance)));
-    }
-
 }
 
 

@@ -27,10 +27,14 @@ public class Menu {
         AccountHolder newAccountHolderExample2 = new AccountHolder("Asif", "Alam", "29/10/99", "London", "E12", "074234455", "gmail", true, true);
         newAccountHolderExample2.addAccount(AccountTypes.Personal);
 
+        AccountHolder newAccountHolderExample3 = new AccountHolder("Haider", "Alam", "21/12/00", "London", "E12", "074234455", "gmail", true, true);
+        newAccountHolderExample3.addAccount(AccountTypes.ISA);
+
         menu.bank.addCustomerAccount(newAccountHolderExample.getId(), newAccountHolderExample);
         menu.bank.addCustomerAccount(newAccountHolderExample2.getId(), newAccountHolderExample2);
+        menu.bank.addCustomerAccount(newAccountHolderExample3.getId(), newAccountHolderExample3);
 
-        welcomeScreen();
+//        welcomeScreen();
         boolean login = login();
         while (menu.running && login) {
             displayOptions();
@@ -110,6 +114,7 @@ public class Menu {
         }
         return stringInput;
     }
+
 
     /* register New Customer */
     public void registerNewCustomer() {
@@ -251,31 +256,34 @@ public class Menu {
         System.out.println("You have transferred £" + amountToTransfer + " to " + payeeFirstName + " " + payeeLastName);
     }
 
-    public void chooseFrequencyOfPayments() {
-        String choosePaymentFrequency = intValidation("Frequency of payments: \n 1. Daily \n 2. Weekly \n 3. Monthly");
+    public String chooseFrequencyOfPayments() {
+        String choosePaymentFrequency = intValidation("Frequency of payments: \n 1. Daily \n 2. Weekly \n 3. Monthly \n");
 
-        String frequency;
+        String frequency = "";
         switch (choosePaymentFrequency) {
             case "1" -> frequency = "daily";
             case "2" -> frequency = "weekly";
             case "3" -> frequency = "monthly";
         }
+        return frequency;
     }
 
-    public void paymentStartDate(int foundCustomer, int accountId) {
+    public String paymentStartDate(int foundCustomer, int accountId) {
         String startDateInput = stringValidation("When do you want the payments to start?: ");
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate standingOrderCreationDate = LocalDate.parse(startDateInput, dateFormat);
         System.out.println("Your payments will start from " + String.format(startDateInput));
         this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setStandingOrderCreationDate(standingOrderCreationDate);
+        return startDateInput;
     }
 
-    public void paymentEndDate(int foundCustomer, int accountId) {
+    public String paymentEndDate(int foundCustomer, int accountId) {
         String endDateInput = stringValidation("When do you want the payments to end?: ");
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate standingOrderEndDate = LocalDate.parse(endDateInput, dateFormat);
         System.out.println("Your payments will end on " + String.format(endDateInput));
         this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).setStandingOrderEndDate(standingOrderEndDate);
+        return endDateInput;
     }
 
     public void standingOrder(int foundCustomer, int accountId) {
@@ -288,9 +296,20 @@ public class Menu {
         String doubleInput =  doubleValidation("Enter Amount: ");
         double standingOrderAmount = Double.parseDouble(doubleInput);
 
-        chooseFrequencyOfPayments();
-        paymentStartDate(foundCustomer, accountId);
-        paymentEndDate(foundCustomer, accountId);
+        String frequencyOfPayments  = chooseFrequencyOfPayments();
+        String startDate  =paymentStartDate(foundCustomer, accountId);
+        String endDate = paymentEndDate(foundCustomer, accountId);
+        this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).addStandingOrders(
+                String.format("Payee : " +payeeId + ", Amount : "+ NumberFormat.getCurrencyInstance().format(standingOrderAmount) + ", Frequency of payments : " +frequencyOfPayments + ", Start date : " + String.format(startDate) + ", End date: " + String.format(endDate))
+        );
+    }
+
+    public void viewStandingOrder(int foundCustomer, int accountId) {
+        System.out.println("**** Standing Orders ****");
+        for (String standingOrders : this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getStandingOrders()) {
+            System.out.println(standingOrders);
+        }
+        System.out.println("=================");
     }
 
     public void createLoan(int foundCustomer, int accountId){
@@ -335,12 +354,26 @@ public class Menu {
 
 
     public void viewBankAccount () {
-        String customerIdInput = intValidation("Enter Customer ID: ");
-        int customerId = Integer.parseInt(customerIdInput);
-        int foundCustomer = bank.findCustomer(customerId);
+        int foundCustomer = 1;
+        do {
+            String customerIdInput = intValidation("Enter Customer ID: ");
+            int customerId = Integer.parseInt(customerIdInput);
+            foundCustomer = bank.findCustomer(customerId);
+            if (foundCustomer == 0 ) {
+                System.out.println("This account does not exist. Please try again.");
+            }
+        } while (foundCustomer == 0);
 
-        String accountIdInput = intValidation("Enter Account Number: ");
-        int accountId = Integer.parseInt(accountIdInput);
+        int accountId = 1;
+        do {
+            String accountIdInput = intValidation("Enter Account Number: ");
+            int accountIdParse = Integer.parseInt(accountIdInput);
+            accountId = this.bank.findBankAccount(accountIdParse);
+            if (accountId == 0 ) {
+                System.out.println("This Bank account does not exist. Please try again.");
+            }
+        } while (accountId == 0);
+
         System.out.println();
 
         System.out.println("Customer Account number: " + foundCustomer);
@@ -352,10 +385,11 @@ public class Menu {
                 System.out.println("2. Withdraw");
                 System.out.println("3. Transfer  ");
                 System.out.println("4. Deposit");
-                System.out.println("5. Standing Order");
-                System.out.println("6. Create Loan");
-                System.out.println("7. Pay Loan");
-                System.out.println("8. View Transactions");
+                System.out.println("5. Set up standing Order");
+                System.out.println("6. View Standing Orders");
+                System.out.println("7. Create Loan");
+                System.out.println("8. Pay Loan");
+                System.out.println("9. View Transactions");
 
                 String userInput = input.nextLine();
                 while (userInput.isEmpty()) {
@@ -369,18 +403,56 @@ public class Menu {
                     case "3" -> transfer(foundCustomer, accountId);
                     case "4" -> depositBalance(foundCustomer, accountId);
                     case "5" -> standingOrder(foundCustomer, accountId);
+                    case "6" -> viewStandingOrder(foundCustomer, accountId);
+                    case "7" -> createLoan(foundCustomer, accountId);
+                    case "8" -> payLoan(foundCustomer, accountId);
+                    case "9" -> displayTransactions(foundCustomer, accountId);
+                }
+                break;
+            case ISA :
+                System.out.println("1. Check Balance");
+                System.out.println("2. Deposit");
+                System.out.println("3. View Transactions");
+
+                userInput = input.nextLine();
+                while (userInput.isEmpty()) {
+                    System.out.println("No input detected. Please choose one option. ");
+                    userInput = input.nextLine();
+                }
+
+                switch (userInput) {
+                    case "1" -> checkBalance(foundCustomer, accountId);
+                    case "2" -> depositBalance(foundCustomer, accountId);
+                    case "3" -> displayTransactions(foundCustomer, accountId);
+                }
+                break;
+            case Business:
+                System.out.println("1. Check Balance");
+                System.out.println("2. Withdraw");
+                System.out.println("3. International Transfer ");
+                System.out.println("4. Deposit");
+                System.out.println("5. Set up Direct Debit");
+                System.out.println("6. Create Loan");
+                System.out.println("7. Pay Loan");
+                System.out.println("8. View Transactions");
+
+                userInput = input.nextLine();
+                while (userInput.isEmpty()) {
+                    System.out.println("No input detected. Please choose one option. ");
+                    userInput = input.nextLine();
+                }
+
+                switch (userInput) {
+                    case "1" -> checkBalance(foundCustomer, accountId);
+                    case "2" -> withdrawBalance(foundCustomer, accountId);
+                    case "3" -> transfer(foundCustomer, accountId);
+                    case "4" -> depositBalance(foundCustomer, accountId);
+                    case "5" -> System.out.println("This feature has not been implemented yet");
                     case "6" -> createLoan(foundCustomer, accountId);
                     case "7" -> payLoan(foundCustomer, accountId);
                     case "8" -> displayTransactions(foundCustomer, accountId);
                 }
                 break;
-            case ISA :
-                System.out.println("1. ");
-                System.out.println("2. ");
-            case Business:
-                System.out.println("1. ");
-                System.out.println("2. ");
-                System.out.println("4. Direct Debit");
         }
     }
 
