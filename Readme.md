@@ -1,7 +1,5 @@
 # AcmeBank
 
-## Reflection
-
 In this project, we created a banking application in Java that provides the bank teller with various functions, including:
 
 - Register New Customer
