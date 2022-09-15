@@ -366,8 +366,6 @@ public class Menu {
         return accountId;
     }
 
-
-
     public void viewBankAccount () {
         int foundCustomer = customerValidation("Enter your customer ID: ");
         int accountId = bankAccountValidation("Enter your bank account ID: ");
