@@ -2,26 +2,30 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public abstract class Account  implements StandingOrder{
-        private static int nextAccNumber = 2000;
-        private final int accNumber; //needs to be unique
+/*The Bank account super class that implements Standing Order Interface */
+public abstract class Account implements StandingOrder {
+    private static int nextAccNumber = 2000; // Bank Account number starts from 2000 an auto increments
+    private final int accNumber; // needs to be unique
 
-        private double balance;
+    private double balance; // Account balance
 
-        private double loanBalance;
+    private double loanBalance; // This variable keeps track of how much loan has been take.
 
-        private final AccountTypes type;
-        private boolean incurCharges;
+    private final AccountTypes type; // Three types of accounts from enum class.
+    private final boolean incurCharges; // Charge the account
 
-        private LocalDate standingOrderCreationDate;
+    private LocalDate standingOrderCreationDate; // The date when a standing order is created.
 
-        private LocalDate standingOrderEndDate;
+    private LocalDate standingOrderEndDate; // The date when a standing order ends.
 
-        private final ArrayList<String> transactions;
+    private final ArrayList<String> transactions; // Keeps track of all the transactions.
 
-        private final ArrayList<String> standingOrders;
+    private final ArrayList<String> standingOrders; // Keeps track of all the standing Orders.
 
-
+    /*
+     * Account constructor
+     * Creates an account and adds it to transactions
+     */
     public Account(double balance, AccountTypes type, boolean incurCharges) {
         this.accNumber = nextAccNumber;
         nextAccNumber++;
@@ -33,85 +37,93 @@ public abstract class Account  implements StandingOrder{
         addTransaction(String.format("Current Balance: - " + NumberFormat.getCurrencyInstance().format(getBalance())));
     }
 
-        public int getAccNumber() {
-            return accNumber;
-        }
+    // Getter
+    public int getAccNumber() {
+        return accNumber;
+    }
 
+    // Getter
+    public double getBalance() {
+        return balance;
+    }
 
-        public double getBalance() {
-            return balance;
-        }
+    // Getter
+    public double getLoanBalance() {
+        return loanBalance;
+    }
 
-        public double getLoanBalance() {return loanBalance;}
+    // Setter
+    public void setLoanBalance(double loanBalance) {
+        this.loanBalance = loanBalance;
+    }
 
-        public void setLoanBalance(double loanBalance) {
-            this.loanBalance = loanBalance;
-        }
+    // Setter
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
 
+    // Getter
+    public AccountTypes getType() {
+        return type;
+    }
 
-        public void setBalance(double balance) {
-            this.balance = balance;
-        }
+    // Withdraw money from an account and add it to transactions.
+    public void withdraw(double amount) {
+        this.balance -= amount;
+        addTransaction(String.format("Withdrawal : " + NumberFormat.getCurrencyInstance().format(amount)));
+    }
 
-        public AccountTypes getType() {
-            return type;
-        }
+    // Deposit money to an account and add it to transactions.
+    public void deposit(double amount) {
+        this.balance += amount;
+        addTransaction(String.format("Deposit : " + NumberFormat.getCurrencyInstance().format(amount)));
+    }
 
+    // Loan
+    public void loan(double amount) {
+        System.out.println("This doesnt allow a loan");
+    }
 
-        public boolean isIncurCharges() {
-            return incurCharges;
-        }
+    // Getter
+    public LocalDate getStandingOrderCreationDate() {
+        return standingOrderCreationDate;
+    }
 
+    // Setter
+    public void setStandingOrderCreationDate(LocalDate standingOrderCreationDate) {
+        this.standingOrderCreationDate = standingOrderCreationDate;
+    }
 
-        public void setIncurCharges(boolean incurCharges) {
-            this.incurCharges = incurCharges;
-        }
+    // Getter
+    public LocalDate getStandingOrderEndDate() {
+        return standingOrderEndDate;
+    }
 
-        public void withdraw (double amount) {
-            this.balance -= amount;
-            addTransaction(String.format("Withdrawal : " + NumberFormat.getCurrencyInstance().format(amount)));
-        }
+    // Setter
+    public void setStandingOrderEndDate(LocalDate standingOrderEndDate) {
+        this.standingOrderEndDate = standingOrderEndDate;
+    }
 
-        public void deposit (double amount) {
-            this.balance += amount;
-            addTransaction(String.format("Deposit : " + NumberFormat.getCurrencyInstance().format(amount)));
-        }
+    // Add a message to the transactions Arraylist for every transaction.
+    public void addTransaction(String message) {
+        transactions.add(message);
+    }
 
-        public void loan (double amount) {
-            System.out.println("This doesnt allow a loan");
-        }
+    // Getter
+    public ArrayList<String> getTransactions() {
+        return transactions;
+    }
 
-        public LocalDate getStandingOrderCreationDate() {
-            return standingOrderCreationDate;
-        }
+    // Getter.
+    public ArrayList<String> getStandingOrders() {
+        return standingOrders;
+    }
 
-        public void setStandingOrderCreationDate(LocalDate standingOrderCreationDate) {
-            this.standingOrderCreationDate = standingOrderCreationDate;
-        }
-
-        public LocalDate getStandingOrderEndDate() {
-            return standingOrderEndDate;
-        }
-
-        public void setStandingOrderEndDate(LocalDate standingOrderEndDate) {
-            this.standingOrderEndDate = standingOrderEndDate;
-        }
-
-        public void addTransaction(String message) {
-            transactions.add(message);
-        }
-
-        public ArrayList<String> getTransactions() {
-            return transactions;
-        }
-
-        public ArrayList<String> getStandingOrders() {
-            return standingOrders;
-        }
-
-        public void addStandingOrders (String message) {
-            standingOrders.add(message);
-        }
+    // Add a message to the StandingOrders Arraylist for every standing order
+    // created.
+    public void addStandingOrders(String message) {
+        standingOrders.add(message);
+    }
 
     @Override
     public String toString() {

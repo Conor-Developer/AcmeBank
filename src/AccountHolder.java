@@ -18,14 +18,13 @@ public class AccountHolder {
 
     private final boolean proofOfAddress;
 
-    //Hashmap of Bank accounts
+    // Hashmap of Bank accounts
     private final Map<Integer, Account> account = new HashMap<>();
-
 
     private final Scanner reader = new Scanner(System.in);
 
-
-    public AccountHolder(String name, String surname, String dateOfBirth, String address, String postCode, String phoneNumber, String email, boolean photoId, boolean proofOfAddress) {
+    public AccountHolder(String name, String surname, String dateOfBirth, String address, String postCode,
+            String phoneNumber, String email, boolean photoId, boolean proofOfAddress) {
         this.id = nextId;
         nextId++;
         this.name = name;
@@ -39,20 +38,19 @@ public class AccountHolder {
         this.proofOfAddress = proofOfAddress;
     }
 
-    protected void addAccount (AccountTypes type) {
+    protected void addAccount(AccountTypes type) {
         Account newAccount;
         if (type == AccountTypes.Personal) {
-            newAccount = new PersonalAccount(1, type , false);
+            newAccount = new PersonalAccount(1, type, false);
             account.put(newAccount.getAccNumber(), newAccount);
         } else if (type == AccountTypes.ISA) {
             newAccount = new ISAAccount(1, type, false);
             account.put(newAccount.getAccNumber(), newAccount);
         } else {
-            newAccount = new BusinessAccount(7, type , false);
+            newAccount = new BusinessAccount(7, type, false);
             account.put(newAccount.getAccNumber(), newAccount);
         }
     }
-
 
     public int getId() {
         return id;
@@ -61,6 +59,7 @@ public class AccountHolder {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -68,6 +67,7 @@ public class AccountHolder {
     public String getSurname() {
         return surname;
     }
+
     public void setSurname(String surname) {
         this.surname = surname;
     }
@@ -75,6 +75,7 @@ public class AccountHolder {
     public String getDateOfBirth() {
         return dateOfBirth;
     }
+
     public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
@@ -82,6 +83,7 @@ public class AccountHolder {
     public String getAddress() {
         return address;
     }
+
     public void setAddress(String address) {
         this.address = address;
     }
@@ -89,6 +91,7 @@ public class AccountHolder {
     public String getPostcode() {
         return postcode;
     }
+
     public void setPostcode(String postcode) {
         this.postcode = postcode;
     }
@@ -96,6 +99,7 @@ public class AccountHolder {
     public String getPhoneNumber() {
         return phoneNumber;
     }
+
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
@@ -103,6 +107,7 @@ public class AccountHolder {
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -115,27 +120,28 @@ public class AccountHolder {
         AccountTypes accountInfo;
         int accountNumber;
         System.out.println("Accounts: ");
-        for(Map.Entry<Integer, Account> values: account.entrySet()) {
-            accountInfo =  values.getValue().getType();
+        for (Map.Entry<Integer, Account> values : account.entrySet()) {
+            accountInfo = values.getValue().getType();
             accountNumber = values.getValue().getAccNumber();
             System.out.println(accountInfo + " Account Number: " + accountNumber);
         }
         System.out.println();
     }
 
-    public void viewAccountHolder (){
-        System.out.println("The account holder associated to the " + this.getId() + " ID is:" +"\n"  + "Full name: " + this.getName()
-                        + " " + this.getSurname() + "\n"+ "Date of birth: " + this.getDateOfBirth() + "\n" + "Address: "
-                        + this.getAddress() + "\n" + "Postcode: " + this.getPostcode() + "\n"
-                        + "Contact number: " + this.getPhoneNumber() + "\n"
-                        + "Email: " + this.getEmail() + "\n"
-                        );
+    public void viewAccountHolder() {
+        System.out.println("The account holder associated to the " + this.getId() + " ID is:" + "\n" + "Full name: "
+                + this.getName()
+                + " " + this.getSurname() + "\n" + "Date of birth: " + this.getDateOfBirth() + "\n" + "Address: "
+                + this.getAddress() + "\n" + "Postcode: " + this.getPostcode() + "\n"
+                + "Contact number: " + this.getPhoneNumber() + "\n"
+                + "Email: " + this.getEmail() + "\n");
         this.getAccountInfo();
-        }
+    }
 
-    public void updateAccountHolder(){
-        System.out.println("The account holder associated to the " + this.getId() + " ID is:" + this.getName() + " " + this.getSurname());
-        System.out.println( "Insert the following details to update the customer's details:");
+    public void updateAccountHolder() {
+        System.out.println("The account holder associated to the " + this.getId() + " ID is:" + this.getName() + " "
+                + this.getSurname());
+        System.out.println("Insert the following details to update the customer's details:");
         System.out.print("First Name: ");
         String firstName = reader.nextLine();
         this.setName(firstName);
@@ -163,7 +169,6 @@ public class AccountHolder {
     protected void removeCustomerAccount(int id) {
         account.remove(id);
     }
-
 
     @Override
     public String toString() {
