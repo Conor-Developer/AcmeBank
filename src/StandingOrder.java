@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 
+//Standing Order interface that is implemented in the account superclass
 public interface StandingOrder {
     LocalDate getStandingOrderCreationDate();
 

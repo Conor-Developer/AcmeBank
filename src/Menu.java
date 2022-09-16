@@ -4,12 +4,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 /* This is the Menu class where the program is run from.
-* The main method is loacted here.*/
+* The main method is located here.*/
 public class Menu {
     Scanner input = new Scanner(System.in);
     Bank bank;
-    boolean running = true;
+    boolean running = true; // boolean to check if the menu is running.
 
+    // Menu constructor
     public Menu(Bank bank) {
         this.bank = bank;
     }
@@ -35,7 +36,10 @@ public class Menu {
         menu.bank.addCustomerAccount(newAccountHolderExample2.getId(), newAccountHolderExample2);
         menu.bank.addCustomerAccount(newAccountHolderExample3.getId(), newAccountHolderExample3);
 
+        // The login screen
         boolean login = login();
+        // Checks if the menu is running and the user has logged in and then shows the
+        // rest of the options
         while (menu.running && login) {
             displayOptions();
             menu.chooseOption();
@@ -49,7 +53,7 @@ public class Menu {
         System.out.println();
     }
 
-    /* Shows the options that are display options. */
+    /* Shows the options that are displayed. */
     public static void displayOptions() {
         System.out.println("1. Register New Customer");
         System.out.println("2. View Customer Profile");
@@ -63,6 +67,7 @@ public class Menu {
         System.out.print("Select one of the options: ");
     }
 
+    // Checks if the user input is a string or not.
     public String stringValidation(String message) {
         boolean isString = false;
         String stringInput = null;
@@ -79,6 +84,7 @@ public class Menu {
         return stringInput;
     }
 
+    // Checks if the user input is an integer or not.
     public String intValidation(String message) {
         boolean isInt = false;
         String stringInput = null;
@@ -95,6 +101,7 @@ public class Menu {
         return stringInput;
     }
 
+    // Checks if the user input is a double or not.
     public String doubleValidation(String message) {
         boolean isDouble = false;
         String stringInput = null;
@@ -160,6 +167,7 @@ public class Menu {
 
     }
 
+    // view the account holder info
     public void viewAccountHolder() {
         String customerIdInput = intValidation("Enter Customer ID: ");
         int customerId = Integer.parseInt(customerIdInput);
@@ -168,6 +176,7 @@ public class Menu {
         this.bank.getCustomerAccounts().get(foundCustomer).viewAccountHolder();
     }
 
+    // find the account holder with the given ID and update account holder
     public void updateAccountHolder() {
         String customerIdInput = intValidation("Enter Customer ID: ");
         int customerId = Integer.parseInt(customerIdInput);
@@ -176,6 +185,7 @@ public class Menu {
         this.bank.getCustomerAccounts().get(foundCustomer).updateAccountHolder();
     }
 
+    // find the account holder with the given ID and delete account holder
     public void deleteAccountHolder() {
         String customerIdInput = intValidation("Enter Customer ID: ");
         int customerId = Integer.parseInt(customerIdInput);
@@ -185,6 +195,8 @@ public class Menu {
         System.out.println("The account has been deleted");
     }
 
+    // find the account holder with the given ID and create a new bank account for
+    // that account holder
     public void createNewBankAccount() {
         String customerIdInput = intValidation("Enter Customer ID: ");
         int customerId = Integer.parseInt(customerIdInput);
@@ -197,6 +209,7 @@ public class Menu {
         System.out.println("3. Business account");
         String option = input.nextLine();
 
+        // create different accounts based on the user input.
         switch (option) {
             case "1" -> this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.Personal);
             case "2" -> this.bank.getCustomerAccounts().get(foundCustomer).addAccount(AccountTypes.ISA);
@@ -204,6 +217,8 @@ public class Menu {
         }
     }
 
+    // Enter account holder id and then bank account number and then delete the
+    // account with the given info.
     public void deleteBankAccount() {
         String customerIdInput = intValidation("Enter Customer ID: ");
         int customerId = Integer.parseInt(customerIdInput);
@@ -215,11 +230,15 @@ public class Menu {
         System.out.println("The bank account has been deleted");
     }
 
+    // use account holder id and then bank account number and then check the
+    // balance of that particular account.
     public void checkBalance(int foundCustomer, int accountId) {
         System.out.println("The balance is "
                 + this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance());
     }
 
+    // use account holder id and then bank account number and then the amount to
+    // withdraw an then withdraw money from that particular account.
     public void withdrawBalance(int foundCustomer, int accountId) {
         String withdrawalAmountInput = doubleValidation("Enter the amount you want to withdraw :");
         double amountToWithdraw = Double.parseDouble(withdrawalAmountInput);
@@ -229,6 +248,8 @@ public class Menu {
                         this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance()));
     }
 
+    // use account holder id and then bank account number and then the amount to
+    // withdraw an then deposit money to that particular account.
     public void depositBalance(int foundCustomer, int accountId) {
         String doubleInput = doubleValidation("How much would you like to Deposit: ");
         double amountToDeposit = Double.parseDouble(doubleInput);
@@ -238,6 +259,12 @@ public class Menu {
                         this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance()));
     }
 
+    /*
+     * use account holder id and then bank account number and then ask for the payee
+     * bank account number and then ask for the amount to transfer.
+     * To make a transfer withdraw money from the payer ID and deposit money to the
+     * payee ID.
+     */
     public void transfer(int foundCustomer, int accountId) {
         int foundPayeeBankAccount = bankAccountValidation("Enter the bank account number of the payee: ");
         int foundPayeeCustomerAccount = bank.findAccountHolderId(foundPayeeBankAccount);
@@ -253,6 +280,7 @@ public class Menu {
         System.out.println("You have transferred £" + amountToTransfer + " to " + payeeFirstName + " " + payeeLastName);
     }
 
+    // choose Frequency Of Payments for the standing order method
     public String chooseFrequencyOfPayments() {
         String choosePaymentFrequency = intValidation(
                 "Frequency of payments: \n 1. Daily \n 2. Weekly \n 3. Monthly \n");
@@ -266,6 +294,7 @@ public class Menu {
         return frequency;
     }
 
+    // Choose payment start date for the standing order method
     public String paymentStartDate(int foundCustomer, int accountId) {
         String startDateInput = stringValidation("When do you want the payments to start?: ");
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -276,6 +305,7 @@ public class Menu {
         return startDateInput;
     }
 
+    // Choose payment end date for the standing order method
     public String paymentEndDate(int foundCustomer, int accountId) {
         String endDateInput = stringValidation("When do you want the payments to end?: ");
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -286,6 +316,7 @@ public class Menu {
         return endDateInput;
     }
 
+    // Creates a standing order with given parameters.
     public void standingOrder(int foundCustomer, int accountId) {
         String payeeAccountNumberInput = intValidation("Enter the account number of the payee: ");
         int payeeId = Integer.parseInt(payeeAccountNumberInput);
@@ -303,6 +334,7 @@ public class Menu {
                         + String.format(endDate)));
     }
 
+    // View all standing orders a user has.
     public void viewStandingOrder(int foundCustomer, int accountId) {
         System.out.println("**** Standing Orders ****");
         for (String standingOrders : this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId)
@@ -312,6 +344,7 @@ public class Menu {
         System.out.println("=================");
     }
 
+    // create a loan for the user when asking for a certain amount.
     public void createLoan(int foundCustomer, int accountId) {
         String amountToLoanInput = doubleValidation("How much loan do you require: ");
         double amountToLoan = Double.parseDouble(amountToLoanInput);
@@ -320,6 +353,7 @@ public class Menu {
                 + this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getBalance());
     }
 
+    // Allow the user to pay off their loan.
     public void payLoan(int foundCustomer, int accountId) {
         String amountToPayLoanInput = doubleValidation("How much loan do you want to pay: ");
         double amountToPayLoan = Double.parseDouble(amountToPayLoanInput);
@@ -346,6 +380,7 @@ public class Menu {
         System.out.println("This is the loan balance " + loanBalance);
     }
 
+    // display all the transactions a user has made.
     public void displayTransactions(int foundCustomer, int accountId) {
         System.out.println("**** Transactions ****");
         for (String transactions : this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId)
@@ -355,6 +390,7 @@ public class Menu {
         System.out.println("=================");
     }
 
+    // Checks if the customer exists in the hashmap or not.
     public int customerValidation(String message) {
         int foundCustomer;
         do {
@@ -369,6 +405,7 @@ public class Menu {
         return foundCustomer;
     }
 
+    // Checks if the bank account exists in the nested hashmap or not.
     public int bankAccountValidation(String message) {
         int accountId;
         do {
@@ -383,6 +420,8 @@ public class Menu {
         return accountId;
     }
 
+    // Allows users to go inside another menu to so they can check balance, withdraw
+    // etc
     public void viewBankAccount() {
         int foundCustomer = customerValidation("Enter your customer ID: ");
         int accountId = bankAccountValidation("Enter your bank account ID: ");
@@ -392,7 +431,9 @@ public class Menu {
         System.out.println("Customer Account number: " + foundCustomer);
         System.out.println("Bank Account number: " + accountId);
 
+        // shows a different menu depending on what type of bank account they have.
         switch (this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getType()) {
+            // Personal account options
             case Personal -> {
                 System.out.println("1. Check Balance");
                 System.out.println("2. Withdraw");
@@ -404,6 +445,7 @@ public class Menu {
                 System.out.println("8. Pay Loan");
                 System.out.println("9. View Transactions");
                 String userInput = input.nextLine();
+                // different actions based on the user input
                 switch (userInput) {
                     case "1" -> checkBalance(foundCustomer, accountId);
                     case "2" -> withdrawBalance(foundCustomer, accountId);
@@ -417,17 +459,20 @@ public class Menu {
                     default -> System.out.println("Please select a valid option.");
                 }
             }
+            // ISA account options.
             case ISA -> {
                 System.out.println("1. Check Balance");
                 System.out.println("2. Deposit");
                 System.out.println("3. View Transactions");
                 String userInput = input.nextLine();
+                // Actions
                 switch (userInput) {
                     case "1" -> checkBalance(foundCustomer, accountId);
                     case "2" -> depositBalance(foundCustomer, accountId);
                     case "3" -> displayTransactions(foundCustomer, accountId);
                 }
             }
+            // Business account options.
             case Business -> {
                 System.out.println("1. Check Balance");
                 System.out.println("2. Withdraw");
@@ -438,6 +483,7 @@ public class Menu {
                 System.out.println("7. Pay Loan");
                 System.out.println("8. View Transactions");
                 String userInput = input.nextLine();
+                // actions
                 switch (userInput) {
                     case "1" -> checkBalance(foundCustomer, accountId);
                     case "2" -> withdrawBalance(foundCustomer, accountId);
@@ -453,6 +499,7 @@ public class Menu {
         }
     }
 
+    // login method and screen
     public static boolean login() {
         welcomeScreen();
 
@@ -505,6 +552,7 @@ public class Menu {
         return authenticated;
     }
 
+    // Allows users to select an option from the first menu
     protected void chooseOption() {
 
         String u = input.nextLine();

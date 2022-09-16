@@ -1,4 +1,5 @@
 
+// Enum class that stores the different types of bank accounts an Account Holder can have.
 public enum AccountTypes {
     Personal("Personal Account"),
     ISA("ISA Account"),

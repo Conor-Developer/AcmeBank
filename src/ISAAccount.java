@@ -1,8 +1,10 @@
 import java.time.LocalDate;
 
+/* ISAAccount that is a child class of Account */
 public class ISAAccount extends Account {
     double tempBalance;
 
+    //Constructor
     ISAAccount(double balance, AccountTypes accountType, boolean incurCharges) {
         super(balance, accountType, incurCharges);
         this.tempBalance = this.getBalance();
