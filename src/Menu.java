@@ -277,8 +277,6 @@ public class Menu {
         String payeeAccountNumberInput = intValidation("Enter the account number of the payee: ");
         int payeeId = Integer.parseInt(payeeAccountNumberInput);
 
-        int foundPayeeBankAccount = bank.findBankAccount(payeeId);
-        int foundPayeeCustomerAccount = bank.findAccountHolderId(foundPayeeBankAccount);
 
         String doubleInput =  doubleValidation("Enter Amount: ");
         double standingOrderAmount = Double.parseDouble(doubleInput);
@@ -339,7 +337,7 @@ public class Menu {
     }
 
     public int customerValidation(String message) {
-        int foundCustomer = 1;
+        int foundCustomer;
         do {
             String customerIdInput = intValidation(message);
             int customerId = Integer.parseInt(customerIdInput);
@@ -353,7 +351,7 @@ public class Menu {
     }
 
     public int bankAccountValidation(String message) {
-        int accountId = 1;
+        int accountId;
         do {
             String accountIdInput = intValidation(message);
             int accountIdParse = Integer.parseInt(accountIdInput);
@@ -376,7 +374,7 @@ public class Menu {
         System.out.println("Bank Account number: " + accountId);
 
         switch (this.bank.getCustomerAccounts().get(foundCustomer).getAccount().get(accountId).getType()) {
-            case Personal :
+            case Personal -> {
                 System.out.println("1. Check Balance");
                 System.out.println("2. Withdraw");
                 System.out.println("3. Transfer  ");
@@ -386,9 +384,7 @@ public class Menu {
                 System.out.println("7. Create Loan");
                 System.out.println("8. Pay Loan");
                 System.out.println("9. View Transactions");
-
                 String userInput = input.nextLine();
-
                 switch (userInput) {
                     case "1" -> checkBalance(foundCustomer, accountId);
                     case "2" -> withdrawBalance(foundCustomer, accountId);
@@ -401,21 +397,19 @@ public class Menu {
                     case "9" -> displayTransactions(foundCustomer, accountId);
                     default -> System.out.println("Please select a valid option.");
                 }
-                break;
-            case ISA :
+            }
+            case ISA -> {
                 System.out.println("1. Check Balance");
                 System.out.println("2. Deposit");
                 System.out.println("3. View Transactions");
-
-                userInput = input.nextLine();
-
+                String userInput = input.nextLine();
                 switch (userInput) {
                     case "1" -> checkBalance(foundCustomer, accountId);
                     case "2" -> depositBalance(foundCustomer, accountId);
                     case "3" -> displayTransactions(foundCustomer, accountId);
                 }
-                break;
-            case Business:
+            }
+            case Business -> {
                 System.out.println("1. Check Balance");
                 System.out.println("2. Withdraw");
                 System.out.println("3. International Transfer ");
@@ -424,9 +418,7 @@ public class Menu {
                 System.out.println("6. Create Loan");
                 System.out.println("7. Pay Loan");
                 System.out.println("8. View Transactions");
-
-                userInput = input.nextLine();
-
+                String userInput = input.nextLine();
                 switch (userInput) {
                     case "1" -> checkBalance(foundCustomer, accountId);
                     case "2" -> withdrawBalance(foundCustomer, accountId);
@@ -438,7 +430,7 @@ public class Menu {
                     case "8" -> displayTransactions(foundCustomer, accountId);
                     default -> System.out.println("Please select a valid option.");
                 }
-                break;
+            }
         }
     }
 
