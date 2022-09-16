@@ -2,9 +2,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+// AccountHolder class allows users to sign up with the bank and use the banks functionalities.
+// A user cannot create a bank account without registering first.
 public class AccountHolder {
 
-    private static int nextId = 4000;
+    private static int nextId = 4000; // Auto incrementing AccountHolder ID that uniquely identifies an account
+                                      // holder.
     private final int id;
     private String name;
     private String surname;
@@ -19,10 +22,12 @@ public class AccountHolder {
     private final boolean proofOfAddress;
 
     // Hashmap of Bank accounts
-    private final Map<Integer, Account> account = new HashMap<>();
+    private final Map<Integer, Account> account = new HashMap<>(); // Hashmap stores all the bank accounts that can be
+                                                                   // created by the users.
 
     private final Scanner reader = new Scanner(System.in);
 
+    // AccountHolder Constructor
     public AccountHolder(String name, String surname, String dateOfBirth, String address, String postCode,
             String phoneNumber, String email, boolean photoId, boolean proofOfAddress) {
         this.id = nextId;
@@ -38,6 +43,7 @@ public class AccountHolder {
         this.proofOfAddress = proofOfAddress;
     }
 
+    // Adds created bank accounts to the hashmap based on their type.
     protected void addAccount(AccountTypes type) {
         Account newAccount;
         if (type == AccountTypes.Personal) {
@@ -52,6 +58,7 @@ public class AccountHolder {
         }
     }
 
+    // Some basic getters and setter methods.
     public int getId() {
         return id;
     }
@@ -116,6 +123,7 @@ public class AccountHolder {
         return account;
     }
 
+    // Print out bank account information
     public void getAccountInfo() {
         AccountTypes accountInfo;
         int accountNumber;
@@ -128,6 +136,7 @@ public class AccountHolder {
         System.out.println();
     }
 
+    // View Account holder associated with each bank account
     public void viewAccountHolder() {
         System.out.println("The account holder associated to the " + this.getId() + " ID is:" + "\n" + "Full name: "
                 + this.getName()
@@ -138,6 +147,7 @@ public class AccountHolder {
         this.getAccountInfo();
     }
 
+    // Allows users to update account holder with new information.
     public void updateAccountHolder() {
         System.out.println("The account holder associated to the " + this.getId() + " ID is:" + this.getName() + " "
                 + this.getSurname());
@@ -166,6 +176,7 @@ public class AccountHolder {
         System.out.print("Customer Details Updated.");
     }
 
+    // Remove bank account from the arraylist
     protected void removeCustomerAccount(int id) {
         account.remove(id);
     }
